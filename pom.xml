@@ -4,11 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.laukvik</groupId>
+    <groupId>no.laukvik</groupId>
     <artifactId>csv-view</artifactId>
-    <version>0.9.1</version>
+    <version>1.0.0</version>
 
-    <packaging>pom</packaging>
+    <!--<packaging>pom</packaging>-->
 
     <name>csv-view</name>
     <description>A desktop application for showing CSV files.</description>
@@ -16,8 +16,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.10</maven.compiler.source>
+        <maven.compiler.target>1.10</maven.compiler.target>
     </properties>
 
     <developers>
@@ -31,68 +31,82 @@
         </developer>
     </developers>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>oss-sonatype-snapshots</id>
+            <url>https://oss.sonatype.org/content/groups/public/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.zenjava</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>8.6.0</version>
-                <configuration>
-                    <mainClass>org.laukvik.csvapp.Main</mainClass>
-                    <jfxMainAppJarName>laukvik-csv-0.9.jar</jfxMainAppJarName>
-                    <identifier>1</identifier>
-                    <vendor>Morten Laukvik</vendor>
-                    <appName>CSV</appName>
-                </configuration>
-                <executions>
-                    <execution>
-                        <!-- required lessThan build-native -->
-                        <id>create-jfxjar</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>build-jar</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>create-native</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>build-native</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-
         <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.java</include>
+                </includes>
+            </resource>
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
                     <include>**/*.properties</include>
                     <include>**/*.html</include>
-                    <include>*.html</include>
-                    <include>*.png</include>
+                    <include>**/*.html</include>
+                    <include>**/*.png</include>
+                    <include>**/*.icns</include>
                 </includes>
             </resource>
         </resources>
+
+
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <source>1.10</source>
+                    <target>1.10</target>
+
+                    <outputDirectory>target/classes</outputDirectory>
+                    <includes>
+                        <include>**/*.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+
+            <!--<plugin>-->
+                <!--<groupId>com.zenjava</groupId>-->
+                <!--<artifactId>javafx-maven-plugin</artifactId>-->
+                <!--<version>8.9.0-SNAPSHOT</version>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<phase>deploy</phase>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+                <!--<configuration>-->
+                    <!--<vendor>laukvik.no</vendor>-->
+                    <!--<mainClass>no.laukvik.csvview.Main</mainClass>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
+        </plugins>
     </build>
 
 
     <dependencies>
         <dependency>
-            <groupId>org.laukvik</groupId>
-            <artifactId>laukvik-csv</artifactId>
-            <version>0.9.1</version>
+            <groupId>no.laukvik</groupId>
+            <artifactId>csv</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -101,9 +115,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <groupId>com.zenjava</groupId>
+            <artifactId>javafx-maven-plugin</artifactId>
+            <version>8.9.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
