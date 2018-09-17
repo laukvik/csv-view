@@ -57,7 +57,7 @@ public class IntegerPivot extends AbstractPivot<IntegerColumn> {
 
     }
 
-//    public static List<Integer> findIntegers(final FrequencyDistributionTableView view){
+//    public static List<Integer> findIntegers(final PivotTableView view){
 //        List<Integer> list = new ArrayList<>();
 //        for (PivotFilter omd : view.getItems()){
 //            if (omd.isSelected()){
@@ -68,7 +68,7 @@ public class IntegerPivot extends AbstractPivot<IntegerColumn> {
 //        return list;
 //    }
 //
-//    public List<IntegerRange> findIntegerRanges(final FrequencyDistributionTableView view){
+//    public List<IntegerRange> findIntegerRanges(final PivotTableView view){
 //        List<IntegerRange> list = new ArrayList<>();
 //        for (PivotFilter omd : view.getItems()){
 //            if (omd.isSelected()){

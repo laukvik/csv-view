@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
  * JavaFX table which contains a Frequency distribution table of values and the amount of instance
  * pr item in the list.
  */
-public final class FrequencyDistributionTableView extends TableView<PivotFilter> {
+public final class PivotTableView extends TableView<PivotFilter> {
 
     /**
      * The width of the select column.
@@ -54,7 +54,7 @@ public final class FrequencyDistributionTableView extends TableView<PivotFilter>
     /**
      * Creates a new instance.
      */
-    public FrequencyDistributionTableView(final PivotType type, final PivotFilterListener listener) {
+    public PivotTableView(final PivotType type, final PivotFilterListener listener) {
         super();
         this.listener = listener;
         this.type = type;

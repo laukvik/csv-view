@@ -61,7 +61,7 @@ public class FloatPivot extends AbstractPivot<FloatColumn> {
         }
     }
 
-//    public List<Float> findFloats(final FrequencyDistributionTableView view){
+//    public List<Float> findFloats(final PivotTableView view){
 //        List<Float> list = new ArrayList<>();
 //        for (PivotFilter omd : view.getItems()){
 //            if (omd.isSelected()){
@@ -72,7 +72,7 @@ public class FloatPivot extends AbstractPivot<FloatColumn> {
 //        return list;
 //    }
 //
-//    public List<FloatRange> findFloatRanges(final FrequencyDistributionTableView view){
+//    public List<FloatRange> findFloatRanges(final PivotTableView view){
 //        List<FloatRange> list = new ArrayList<>();
 //        for (PivotFilter omd : view.getItems()){
 //            if (omd.isSelected()){

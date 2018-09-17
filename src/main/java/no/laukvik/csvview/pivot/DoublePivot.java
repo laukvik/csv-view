@@ -57,7 +57,7 @@ public class DoublePivot extends AbstractPivot<DoubleColumn> {
         }
     }
 
-//    public static List<Double> findDoubles(final FrequencyDistributionTableView view){
+//    public static List<Double> findDoubles(final PivotTableView view){
 //        List<Double> list = new ArrayList<>();
 //        for (PivotFilter omd : view.getItems()){
 //            if (omd.isSelected()){
@@ -68,7 +68,7 @@ public class DoublePivot extends AbstractPivot<DoubleColumn> {
 //        return list;
 //    }
 //
-//    public static List<DoubleRange> findDoubleRanges(final FrequencyDistributionTableView view){
+//    public static List<DoubleRange> findDoubleRanges(final PivotTableView view){
 //        List<DoubleRange> list = new ArrayList<>();
 //        for (PivotFilter omd : view.getItems()){
 //            if (omd.isSelected()){

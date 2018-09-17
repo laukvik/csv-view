@@ -201,7 +201,7 @@ public class StringPivot extends AbstractPivot<StringColumn> {
 
     }
 
-    public static List<String> findStrings(final FrequencyDistributionTableView view){
+    public static List<String> findStrings(final PivotTableView view){
         List<String> list = new ArrayList<>();
         for (PivotFilter omd : view.getItems()){
             if (omd.isSelected()){
