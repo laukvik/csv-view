@@ -111,13 +111,13 @@ public class PivotController extends TabPane implements PivotFilterListener {
 
     public PivotFilter getSelectedObservableFrequencyDistribution() {
         int tabIndex = getSelectionModel().getSelectedIndex();
-        FrequencyDistributionTableView tableView = getFrequencyDistributionTableView(tabIndex);
+        PivotTableView tableView = getFrequencyDistributionTableView(tabIndex);
         int rowIndex = tableView.getSelectionModel().getSelectedIndex();
         return rowIndex > -1 ? tableView.getItems().get(rowIndex) : null;
     }
 
-    public FrequencyDistributionTableView getFrequencyDistributionTableView(int tabIndex){
-        return (FrequencyDistributionTableView) getTabs().get(tabIndex).getContent();
+    public PivotTableView getFrequencyDistributionTableView(int tabIndex){
+        return (PivotTableView) getTabs().get(tabIndex).getContent();
     }
 
     public List<ValueMatcher> getMatchers() {

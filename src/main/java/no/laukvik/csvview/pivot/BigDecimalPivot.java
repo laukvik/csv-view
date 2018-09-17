@@ -56,7 +56,7 @@ public class BigDecimalPivot extends AbstractPivot<BigDecimalColumn> {
         }
     }
 
-//    public static List<BigDecimal> findBigDecimals(final FrequencyDistributionTableView view){
+//    public static List<BigDecimal> findBigDecimals(final PivotTableView view){
 //        List<BigDecimal> list = new ArrayList<>();
 //        for (PivotFilter omd : view.getItems()){
 //            if (omd.isSelected()){
@@ -67,7 +67,7 @@ public class BigDecimalPivot extends AbstractPivot<BigDecimalColumn> {
 //        return list;
 //    }
 //
-//    public static List<BigDecimalRange> findBigDecimalRanges(final FrequencyDistributionTableView view){
+//    public static List<BigDecimalRange> findBigDecimalRanges(final PivotTableView view){
 //        List<BigDecimalRange> list = new ArrayList<>();
 //        for (PivotFilter omd : view.getItems()){
 //            if (omd.isSelected()){

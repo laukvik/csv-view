@@ -128,6 +128,7 @@ public final class Main extends Application implements ColumnListener, PivotList
 
     private BorderPane root;
     private SplitPane mainSplit;
+    private PivotSelectionController pivotSelectionController;
     /**
      * Can be run from commandline.
      *
@@ -154,17 +155,22 @@ public final class Main extends Application implements ColumnListener, PivotList
         columnsScroll.setFitToHeight(true);
         columnsScroll.setFitToWidth(true);
 
+        pivotSelectionController = new PivotSelectionController();
+
         pivotController = new PivotController();
         pivotController.addPivotListener(this);
+        pivotController.addPivotListener(pivotSelectionController);
 
         columnController.addColumnListener(this);
         contentController = new ContentController();
         contentController.openResults(resultsTable);
 
 
-        final SplitPane tableSplit = new SplitPane(columnsScroll, pivotController);
+
+
+        final SplitPane tableSplit = new SplitPane(columnsScroll, pivotController, pivotSelectionController);
         tableSplit.setOrientation(Orientation.VERTICAL);
-        tableSplit.setDividerPosition(0, DIVIDER_POSITION_H);
+        tableSplit.setDividerPositions(0.2, 0.9, 0.1);
         mainSplit = new SplitPane(tableSplit, contentController);
         mainSplit.setDividerPositions(DIVIDER_POSITION_V);
         final VBox topContainer = new VBox();
@@ -175,6 +181,7 @@ public final class Main extends Application implements ColumnListener, PivotList
         root.setTop(topContainer);
         root.setCenter(mainSplit);
         root.setBottom(summaryBar);
+
         final java.awt.Dimension percent = Builder.getPercentSize(0.8f, 0.7f);
         final Scene scene = new Scene(root, percent.getWidth(), percent.getHeight());
         stage.setScene(scene);

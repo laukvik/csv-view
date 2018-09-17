@@ -4,7 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
 import no.laukvik.csv.CSV;
-import no.laukvik.csvview.pivot.FrequencyDistributionTableView;
+import no.laukvik.csvview.pivot.PivotTableView;
 import no.laukvik.csvview.pivot.PivotFilter;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public final class ChartBuilder {
         return new PieChart(data);
     }
 
-    public static PieChart buildPieChart(final FrequencyDistributionTableView uniqueView) {
+    public static PieChart buildPieChart(final PivotTableView uniqueView) {
         List<PieChart.Data> dataset = new ArrayList<>();
         int max = uniqueView.getItems().size();
         int selectCount = 0;

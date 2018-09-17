@@ -315,7 +315,7 @@ public class DatePivot extends AbstractPivot<DateColumn> {
 //        return matcher;
 //    }
 //
-//    public List<Date> findDates(final FrequencyDistributionTableView view){
+//    public List<Date> findDates(final PivotTableView view){
 //        List<Date> list = new ArrayList<>();
 //        for (PivotFilter omd : view.getItems()){
 //            if (omd.isSelected()){

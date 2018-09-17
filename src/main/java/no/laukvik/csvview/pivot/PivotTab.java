@@ -7,7 +7,7 @@ import no.laukvik.csvview.utils.Builder;
 public class PivotTab extends Tab {
 
     private PivotType pivotType;
-    private FrequencyDistributionTableView tableView;
+    private PivotTableView tableView;
     private Column column;
     private PivotFilterListener listener;
 
@@ -15,7 +15,7 @@ public class PivotTab extends Tab {
         super(Builder.getBundle().getString("pivot." + pivotType.name().toLowerCase().replace("_", ".")));
         this.pivotType = pivotType;
         this.column = column;
-        this.tableView = new FrequencyDistributionTableView(pivotType, listener);
+        this.tableView = new PivotTableView(pivotType, listener);
         setContent(this.tableView);
     }
 
