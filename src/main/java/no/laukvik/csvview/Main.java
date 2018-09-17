@@ -825,16 +825,16 @@ public final class Main extends Application implements ColumnListener, PivotList
 
     @Override
     public void pivotFocused(PivotFilter filter) {
-        System.out.println("pivotFocused: " + filter );
+        //System.out.println("pivotFocused: " + filter );
     }
 
     @Override
     public void pivotChanged(PivotFilter filter, PivotSelection selection) {
-        System.out.println("pivotChanged: " + filter.labelProperty().get() + " " + filter.isSelected() );
+        //System.out.println("pivotChanged: " + filter.labelProperty().get() + " " + filter.isSelected() );
     }
 
     @Override
     public void pivotTabChanged(Tab tab) {
-        System.out.println("pivotTabChanged: " + tab);
+        //System.out.println("pivotTabChanged: " + tab);
     }
 }

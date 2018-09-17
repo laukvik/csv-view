@@ -135,4 +135,33 @@ public class PivotFilter implements ChangeListener<Boolean>{
         return count;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PivotFilter that = (PivotFilter) o;
+
+        Object thisValue = value.get();
+        Object thatValue = that.value.get();
+
+        if (thisValue == null && thatValue != null){
+            return false;
+        }
+        if (thisValue != null && thatValue == null){
+            return false;
+        }
+
+        if (!thisValue.equals(thatValue)) return false;
+        if (!column.equals(that.column)) return false;
+        return pivotType == that.pivotType;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = value.hashCode();
+        result = 31 * result + column.hashCode();
+        result = 31 * result + pivotType.hashCode();
+        return result;
+    }
 }

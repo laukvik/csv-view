@@ -4,6 +4,8 @@ import javafx.scene.control.Tab;
 import no.laukvik.csv.columns.Column;
 import no.laukvik.csvview.utils.Builder;
 
+import java.util.Optional;
+
 public class PivotTab extends Tab {
 
     private PivotType pivotType;
@@ -17,6 +19,15 @@ public class PivotTab extends Tab {
         this.column = column;
         this.tableView = new PivotTableView(pivotType, listener);
         setContent(this.tableView);
+    }
+
+    public void setSelection(PivotSelection selection){
+//        for (PivotFilter f : tableView.getItems()){
+//            if (selection.contains(f)){
+//                f.selectedProperty().set(true);
+//            }
+//        }
+        tableView.getItems().stream().filter(filter -> selection.contains(filter)).forEach(filter -> filter.selectedProperty().set(true));
     }
 
     public void clear(){

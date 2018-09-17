@@ -15,7 +15,14 @@ public class PivotSelection {
         filters.clear();
     }
 
+    public boolean contains(PivotFilter filter){
+        return this.filters.contains(filter);
+    }
+
     public void add(PivotFilter filter){
+        if (filters.contains(filter)){
+            return;
+        }
         filters.add(filter);
     }
 

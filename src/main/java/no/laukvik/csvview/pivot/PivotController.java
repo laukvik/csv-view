@@ -104,6 +104,12 @@ public class PivotController extends TabPane implements PivotFilterListener {
             return;
         }
 
+
+        List<PivotTab> tabs = abstractPivot.getTabs();
+        for (PivotTab t : tabs){
+            t.setSelection(pivotSelection);
+        }
+
         // Load all tabs from column into current
         getTabs().addAll(abstractPivot.getTabs());
 
