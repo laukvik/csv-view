@@ -108,7 +108,7 @@ public class ColumnController extends TableView<ObservableColumn> {
         columnListeners.stream().forEach( l -> l.columnChanged(column));
     }
 
-    public void fireVisibilityChanged(Column column, boolean visible){
+    void fireVisibilityChanged(Column column, boolean visible){
         columnListeners.stream().forEach( l -> l.columnVisibilityChanged(column, visible));
     }
 
@@ -128,7 +128,7 @@ public class ColumnController extends TableView<ObservableColumn> {
      * @param csv the csv
      * @return ObservableList of all Columns
      */
-    public ObservableList<ObservableColumn> buildColumns(final CSV csv) {
+    private ObservableList<ObservableColumn> buildColumns(final CSV csv) {
         List<ObservableColumn> list = new ArrayList<>();
         csv.getColumns().stream().forEach(column -> list.add(new ObservableColumn(column, this)));
         return FXCollections.observableArrayList(list);

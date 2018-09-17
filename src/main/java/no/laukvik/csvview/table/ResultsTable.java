@@ -35,6 +35,8 @@ public class ResultsTable extends TableView<ObservableRow> {
      */
     public ResultsTable() {
         super();
+        this.query = null;
+        this.csv = null;
         listeners = new ArrayList<>();
         visibleColumns = new ArrayList<>();
         ResourceBundle bundle = Builder.getBundle();
@@ -42,21 +44,30 @@ public class ResultsTable extends TableView<ObservableRow> {
         Label l = new Label(bundle.getString("table.results.empty"));
         setPlaceholder(l);
         getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        clearAll();
+    }
+
+    public void setCSV(CSV csv) {
+        this.csv = csv;
         clearRows();
+        buildColumns(csv);
+        buildRows(csv);
     }
 
-    private void fireRowSelected(Row row){
-
+    public void setQuery(Query query) {
+        this.query = query;
+        rebuild();
     }
 
-    public void addDataTableListener(DataTableListener listener){
-        listeners.add(listener);
+    public void setColumns(List<Column> selectedColumns) {
+        this.visibleColumns = selectedColumns;
+        this.rebuild();
     }
 
     /**
      * Removes all rows.
      */
-    public final void clearRows() {
+    private void clearRows() {
         setItems(FXCollections.observableArrayList());
         getColumns().clear();
     }
@@ -72,18 +83,49 @@ public class ResultsTable extends TableView<ObservableRow> {
         buildRows(csv);
     }
 
-    public void clearAll(){
-        visibleColumns.clear();
+    public void clearAll() {
+        visibleColumns = null;
         clearRows();
     }
 
-    public void setCSV(CSV csv) {
-        clearRows();
+    private void rebuild() {
         buildColumns(csv);
         buildRows(csv);
     }
 
-    private TableColumn<ObservableRow, String> buildColumn(final Column c, int colX){
+    private void buildColumns(CSV csv) {
+        getColumns().clear();
+        if (csv == null) {
+            return;
+        }
+        if (emptyColumns()) {
+            csv.getColumns()
+                    .stream()
+                    .forEach(column -> getColumns().add(buildColumn(column, csv.indexOf(column))));
+        } else {
+            visibleColumns
+                    .stream()
+                    .forEach(column -> getColumns().add(buildColumn(column, csv.indexOf(column))));
+        }
+    }
+
+    private boolean emptyColumns(){
+        return visibleColumns == null || visibleColumns.isEmpty();
+    }
+
+    public void buildRows(CSV csv) {
+        setItems(FXCollections.observableArrayList());
+        if (csv == null) {
+            return;
+        }
+        if (query == null) {
+            csv.findRows().stream().forEach(row -> getItems().add(new ObservableRow(row, csv)));
+        } else {
+            csv.findRowsByQuery(query).stream().forEach(row -> getItems().add(new ObservableRow(row, csv)));
+        }
+    }
+
+    private TableColumn<ObservableRow, String> buildColumn(final Column c, int colX) {
         final TableColumn<ObservableRow, String> tc = new TableColumn<>(c.getName());
         tc.setCellFactory(TextFieldTableCell.forTableColumn());
         tc.setCellValueFactory(
@@ -100,117 +142,12 @@ public class ResultsTable extends TableView<ObservableRow> {
         return tc;
     }
 
-    public void buildColumns(CSV csv){
-        getColumns().clear();
-        visibleColumns
-                .stream()
-                .forEach(column -> getColumns().add(buildColumn(column, visibleColumns.indexOf(column))));
-//        for (int x = 0; x < csv.getColumnCount(); x++) {
-//            final Column c = csv.getColumn(x);
-//            final TableColumn<ObservableRow, String> tc = buildColumn(c, x);
-//            getColumns().add(tc);
-//        }
+    public void addDataTableListener(DataTableListener listener) {
+        listeners.add(listener);
     }
 
-    public void buildRows(CSV csv){
-        setItems(FXCollections.observableArrayList());
-        csv.findRows().stream().forEach(row -> getItems().add(new ObservableRow(row, csv)));
+    public void removeDataTableListener(DataTableListener listener) {
+        listeners.remove(listener);
     }
-
-    public void setColumns(List<Column> selectedColumns) {
-        this.visibleColumns = selectedColumns;
-    }
-
-
-//    /**
-//     * Builds an ObservableList of all Columns found in the MetaData.
-//     *
-//     * @param csv the csv
-//     * @return ObservableList of all Columns
-//     */
-//    public static ObservableList<ObservableColumn> createAllObservableList(final CSV csv) {
-//        List<ObservableColumn> list = new ArrayList<>();
-//        for (int x = 0; x < csv.getColumnCount(); x++) {
-//            Column c = csv.getColumn(x);
-//            list.add(new ObservableColumn(c));
-//        }
-//        return FXCollections.observableArrayList(list);
-//    }
-
-//    /**
-//     * Builds an ObservableList of FrequencyDistribution.
-//     *
-//     * @param columnIndex the columnIndex
-//     * @param csv         the CSV
-//     * @param main        the Main
-//     * @return ObservableList of FrequencyDistribution
-//     */
-//    public static ObservableList<PivotFilter> createFrequencyDistributionObservableList(
-//            final int columnIndex, final CSV csv, final Main main) {
-//        List<PivotFilter> list = new ArrayList<>();
-////        FrequencyDistribution d = csv.buildFrequencyDistribution(columnIndex);
-////        Column c = csv.getColumn(columnIndex);
-////        for (String key : d.getKeys()) {
-////            boolean selected = main.getQueryModel().isSelected(c, key);
-////            list.addValueMatcher(new PivotFilter(selected, key, key, d.getCount(key), c, main));
-////        }
-//        return FXCollections.observableArrayList(list);
-//    }
-
-//    /**
-//     * Creates the Rows.
-//     *
-//     * @param resultsTable the TableView
-//     * @param csv              the csv file
-//     * @param main             the Main
-//     */
-//    public static void createResultsRows(final ResultsTable resultsTable,
-//                                         final CSV csv,
-//                                         final Main main) {
-////        resultsTable.getItems().clearAll();
-////        QueryModel query = main.getQuery();
-////        if (query != null) {
-////            List<Row> rows = csv.findRowsByQuery(query);
-////            for (int y = 0; y < rows.size(); y++) {
-////                resultsTable.getItems().addValueMatcher(new ObservableRow(rows.get(y), csv, main));
-////            }
-////        } else {
-////            for (int y = 0; y < csv.getRowCount(); y++) {
-////                resultsTable.getItems().addValueMatcher(new ObservableRow(csv.getRow(y), csv, main));
-////            }
-////        }
-////        csv.findRows().stream().forEach(row -> resultsTable.getItems().add(new ObservableRow(row, csv)));
-//        resultsTable.buildRows(csv);
-//    }
-
-//    /**
-//     * Removes all columns in the resultsTable and populates it with all columns found in the MetaData.
-//     *
-//     * @param resultsTable the resultsTable
-//     * @param csv the csv
-//     */
-//    public static void createResultsColumns(final ResultsTable resultsTable, final CSV csv) {
-//        resultsTable.getColumns().clearAll();
-////        for (int x = 0; x < csv.getColumnCount(); x++) {
-////            final Column c = csv.getColumn(x);
-////                final TableColumn<ObservableRow, String> tc = new TableColumn<>(c.getName());
-////                tc.setCellFactory(TextFieldTableCell.forTableColumn());
-////
-//////                resultsTable.getColumns().addValueMatcher(tc);
-////                final int colX = x;
-////                tc.setCellValueFactory(
-////                        new Callback<TableColumn.CellDataFeatures<ObservableRow, String>, ObservableValue<String>>() {
-////                            @Override
-////                            public ObservableValue<String> call(
-////                                    final TableColumn.CellDataFeatures<ObservableRow, String> param) {
-////                                return param.getValue().getValue(colX);
-////                            }
-////                        }
-////                );
-////                tc.setCellFactory(TextFieldTableCell.forTableColumn());
-////                tc.setMinWidth(COLUMN_WIDTH_DEFAULT);
-////        }
-//        resultsTable.buildColumns(csv);
-//    }
 
 }
