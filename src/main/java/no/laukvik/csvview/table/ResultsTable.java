@@ -9,12 +9,13 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
 import no.laukvik.csv.CSV;
-import no.laukvik.csv.Row;
 import no.laukvik.csv.columns.Column;
+import no.laukvik.csv.query.Query;
 import no.laukvik.csvview.utils.Builder;
-import no.laukvik.csvview.Main;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * A JavaFX component showing all columns in a CSV.
@@ -29,6 +30,8 @@ public class ResultsTable extends TableView<ObservableRow> {
     private static final int COLUMN_WIDTH_DEFAULT = 100;
     private List<DataTableListener> listeners;
     private List<Column> visibleColumns;
+    private Query query;
+    private CSV csv;
 
     /**
      * Creates a new empty instance.
@@ -70,17 +73,6 @@ public class ResultsTable extends TableView<ObservableRow> {
     private void clearRows() {
         setItems(FXCollections.observableArrayList());
         getColumns().clear();
-    }
-
-    /**
-     * Notifies that the rows where changed and needs rebuilding.
-     *
-     * @param csv  the csv instance
-     * @param main the main instance
-     */
-    public final void columnsChanged(final CSV csv, final Main main) {
-        buildColumns(csv);
-        buildRows(csv);
     }
 
     public void clearAll() {
