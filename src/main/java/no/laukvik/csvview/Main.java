@@ -65,10 +65,6 @@ import static no.laukvik.csvview.utils.Formatter.*;
 public final class Main extends Application implements ColumnListener, PivotListener {
 
     /**
-     * The horizontal divider position.
-     */
-    private static final float DIVIDER_POSITION_H = 0.25f;
-    /**
      * The vertical divider position.
      */
     private static final float DIVIDER_POSITION_V = 0.2f;
@@ -80,10 +76,6 @@ public final class Main extends Application implements ColumnListener, PivotList
      * The CSV model.
      */
     private CSV csv;
-    /**
-     * Contains the query
-     */
-    private Query query;
     /**
      * The JavaFX stage.
      */
@@ -173,6 +165,11 @@ public final class Main extends Application implements ColumnListener, PivotList
         tableSplit.setDividerPositions(0.2, 0.9, 0.1);
         mainSplit = new SplitPane(tableSplit, contentController);
         mainSplit.setDividerPositions(DIVIDER_POSITION_V);
+
+//        tableSplit.setPrefWidth(250);
+//        tableSplit.setMinWidth(250);
+        SplitPane.setResizableWithParent(tableSplit, Boolean.FALSE);
+
         final VBox topContainer = new VBox();
         menuBar = new MainMenuBar(this);
         topContainer.getChildren().add(menuBar);
