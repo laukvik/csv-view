@@ -22,29 +22,24 @@ import java.util.ResourceBundle;
 public class ContentController extends ScrollPane {
 
     private final ResourceBundle bundle;
-    private ViewMode viewMode;
 
     public ContentController() {
         super();
         this.bundle = Builder.getBundle();
-        this.viewMode = ViewMode.Empty;
         setFitToHeight(true);
         setFitToWidth(true);
     }
 
     public void openEmpty(){
-        this.viewMode = ViewMode.Empty;
         setContent(getPreviewEmptyNode());
     }
 
     public void openPieChart(PieChart chart){
         setContent(chart);
-        this.viewMode = ViewMode.Chart;
     }
 
     public void openResults(ResultsTable resultsTable) {
         setContent(resultsTable);
-        viewMode = ViewMode.Results;
     }
 
     public Node getPreviewEmptyNode() {
@@ -53,11 +48,11 @@ public class ContentController extends ScrollPane {
         return pane;
     }
 
-    public void openPreview(PivotFilter ofd, CSV csv) {
-        if (ofd == null) {
+    public void openPreview(PivotFilter filter, CSV csv) {
+        if (filter == null) {
             openEmpty();
         } else {
-            String filename = ofd.labelProperty().getValue();
+            String filename = filter.labelProperty().getValue();
             if (filename == null || filename.trim().isEmpty()) {
                 setContent(new Label(bundle.getString("view.preview.empty")));
             } else if (filename.startsWith("http")) {
@@ -79,7 +74,6 @@ public class ContentController extends ScrollPane {
                 setContent(getPreviewEmptyNode());
             }
         }
-        viewMode = ViewMode.Preview;
     }
 
     public void openWikipedia(PivotFilter ofd) {
@@ -96,7 +90,6 @@ public class ContentController extends ScrollPane {
                 setContent(getPreviewEmptyNode());
             }
         }
-        viewMode = ViewMode.Wikipedia;
     }
 
     public void openGoogleMaps(PivotFilter ofd) {
@@ -113,7 +106,6 @@ public class ContentController extends ScrollPane {
                 setContent(getPreviewEmptyNode());
             }
         }
-        viewMode = ViewMode.Maps;
     }
 
     public void openGoogleSearch(PivotFilter ofd) {
@@ -130,6 +122,5 @@ public class ContentController extends ScrollPane {
                 setContent(getPreviewEmptyNode());
             }
         }
-        viewMode = ViewMode.Search;
     }
 }

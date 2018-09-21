@@ -725,17 +725,25 @@ public final class Main extends Application implements ColumnListener, PivotList
 
     public void handleTabChanged() {
         if (viewMode == ViewMode.Results) {
-            handleViewResultsAction();
+            contentController.openResults(resultsTable);
         } else if (viewMode == ViewMode.Chart) {
-            handleViewChartAction();
+            int index = pivotController.getSelectionModel().getSelectedIndex();
+            if (index > -1){
+                final PieChart chart = ChartBuilder.buildPieChart(pivotController.getPivotTableView(index));
+                contentController.openPieChart(chart);
+            }
         } else if (viewMode == ViewMode.Maps) {
-            handleViewGoogleMapsAction();
+            PivotFilter ofd = pivotController.getSelectedPivotFilter();
+            contentController.openGoogleMaps(ofd);
         } else if (viewMode == ViewMode.Preview) {
-            handleViewPreviewAction();
+            PivotFilter ofd = pivotController.getSelectedPivotFilter();
+            contentController.openPreview(ofd, csv);
         } else if (viewMode == ViewMode.Search) {
-            handleViewGoogleSearchAction();
+            PivotFilter ofd = pivotController.getSelectedPivotFilter();
+            contentController.openGoogleSearch(ofd);
         } else if (viewMode == ViewMode.Wikipedia) {
-            handleViewWikipediaAction();
+            PivotFilter ofd = pivotController.getSelectedPivotFilter();
+            contentController.openWikipedia(ofd);
         }
     }
 
@@ -743,59 +751,49 @@ public final class Main extends Application implements ColumnListener, PivotList
      * Handles chart action.
      */
     public void handleViewChartAction() {
-        int index = pivotController.getSelectionModel().getSelectedIndex();
-        final PieChart chart = ChartBuilder.buildPieChart(pivotController.getFrequencyDistributionTableView(index));
-        contentController.openPieChart(chart);
+        viewMode = ViewMode.Chart;
+        handleTabChanged();
     }
 
     /**
      * Handles view results action.
      */
     public void handleViewResultsAction() {
-        contentController.openResults(resultsTable);
+        viewMode = ViewMode.Results;
+        handleTabChanged();
     }
 
     /**
      * Handles preview action.
      */
     public void handleViewPreviewAction() {
-
-        PivotFilter ofd = pivotController.getSelectedObservableFrequencyDistribution();
-        contentController.openPreview(ofd, csv);
+        viewMode = ViewMode.Preview;
+        handleTabChanged();
     }
 
     /**
      * Handles Wikipedia action.
      */
     public void handleViewWikipediaAction() {
-        PivotFilter ofd = pivotController.getSelectedObservableFrequencyDistribution();
-        contentController.openWikipedia(ofd);
+        viewMode = ViewMode.Wikipedia;
+        handleTabChanged();
     }
 
     /**
      * Handles Maps action.
      */
     public void handleViewGoogleMapsAction() {
-        PivotFilter ofd = pivotController.getSelectedObservableFrequencyDistribution();
-        contentController.openGoogleMaps(ofd);
+        viewMode = ViewMode.Maps;
+        handleTabChanged();
     }
 
     /**
      * Handles Search action.
      */
     public void handleViewGoogleSearchAction() {
-        PivotFilter ofd = pivotController.getSelectedObservableFrequencyDistribution();
-        contentController.openGoogleSearch(ofd);
+        viewMode = ViewMode.Search;
+        handleTabChanged();
     }
-
-    public Query getQuery() {
-        return query;
-    }
-
-    public void setQuery(final Query query) {
-        this.query = query;
-    }
-
 
     /* -------------------------------------- Column Controller events */
 
@@ -825,12 +823,11 @@ public final class Main extends Application implements ColumnListener, PivotList
 
     @Override
     public void pivotFocused(PivotFilter filter) {
-        //System.out.println("pivotFocused: " + filter );
+        handleTabChanged();
     }
 
     @Override
     public void pivotChanged(PivotFilter filter, PivotSelection selection) {
-        //System.out.println("pivotChanged: " + filter.labelProperty().get() + " " + filter.isSelected() );
         QueryModel model = new QueryModel();
         model.setSelection(selection);
         if (selection.isEmpty()){
@@ -840,10 +837,11 @@ public final class Main extends Application implements ColumnListener, PivotList
         } else {
             resultsTable.setQuery(model.buildQuery(csv));
         }
+        handleTabChanged();
     }
 
     @Override
     public void pivotTabChanged(Tab tab) {
-        //System.out.println("pivotTabChanged: " + tab);
+        handleTabChanged();
     }
 }
