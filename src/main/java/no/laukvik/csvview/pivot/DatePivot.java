@@ -250,7 +250,7 @@ public class DatePivot extends AbstractPivot<DateColumn> {
     }
 
     private String getLanguage(String s) {
-        return Builder.getBundle().getString(s);
+        return Builder.getBundle().getString("pivotcontroller." + s);
     }
 
 
