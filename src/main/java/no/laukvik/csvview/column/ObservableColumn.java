@@ -5,7 +5,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import no.laukvik.csv.columns.Column;
-import no.laukvik.csvview.Main;
 
 /**
  * Represents a column that is observable for JavaFX components.

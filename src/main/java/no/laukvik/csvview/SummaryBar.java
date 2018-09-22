@@ -49,23 +49,22 @@ class SummaryBar extends ToolBar {
 
     public SummaryBar(final ResourceBundle bundle) {
         this.bundle = bundle;
-        Label rows = new Label(bundle.getString("summarybar.status.rows"));
-
+        Label rows = new Label(bundle.getString("summarybar.rows"));
         rows.setDisable(true);
         rowsLabel = new Label("-");
-        Label cols = new Label(bundle.getString("summarybar.status.columns"));
+        Label cols = new Label(bundle.getString("summarybar.columns"));
         cols.setDisable(true);
         colsLabel = new Label("-");
-        Label encoding = new Label(bundle.getString("summarybar.status.encoding"));
+        Label encoding = new Label(bundle.getString("summarybar.encoding"));
         encoding.setDisable(true);
         encodingLabel = new Label("-");
-        Label size = new Label(bundle.getString("summarybar.status.size"));
+        Label size = new Label(bundle.getString("summarybar.size"));
         size.setDisable(true);
         sizeLabel = new Label("-");
-        Label separator = new Label(bundle.getString("summarybar.status.separator"));
+        Label separator = new Label(bundle.getString("summarybar.separator"));
         separator.setDisable(true);
         separatorLabel = new Label("-");
-        Label filetype = new Label(bundle.getString("summarybar.status.filetype"));
+        Label filetype = new Label(bundle.getString("summarybar.filetype"));
         filetype.setDisable(true);
         fileTypeLabel = new Label("");
         progressBar = new ProgressBar();
@@ -85,7 +84,7 @@ class SummaryBar extends ToolBar {
 
     public void setCharset(Charset charset){
         if (charset == null) {
-            encodingLabel.setText(bundle.getString("metadata.encoding.na"));
+            encodingLabel.setText(bundle.getString("summarybar.encoding.na"));
         } else {
             encodingLabel.setText(charset.name());
         }

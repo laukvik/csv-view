@@ -22,7 +22,7 @@ import static no.laukvik.csvview.utils.Builder.isMac;
 /**
  * JavaFX MenuBar for the CSV application.
  */
-final class MainMenuBar extends MenuBar {
+final class AppMenu extends MenuBar {
 
     /**
      * The Menu for View.
@@ -31,7 +31,7 @@ final class MainMenuBar extends MenuBar {
     /**
      * The Application this MenuBar belongs to.
      */
-    private final Main main;
+    private final App app;
     /**
      * The ResourceBundle.
      */
@@ -44,11 +44,11 @@ final class MainMenuBar extends MenuBar {
     /**
      * Creates a new MenuBar for the JavaFX application.
      *
-     * @param main the main app
+     * @param app the app app
      */
-    public MainMenuBar(final Main main) {
+    public AppMenu(final App app) {
         super();
-        this.main = main;
+        this.app = app;
         bundle = Builder.getBundle();
         setUseSystemMenuBar(isMac());
         viewMenu = buildViewMenu();
@@ -77,7 +77,7 @@ final class MainMenuBar extends MenuBar {
     }
     
     private String getString(String key){
-        return bundle.getString("mainmenubar." + key);
+        return bundle.getString("appmenu." + key);
     }
 
     /**
@@ -91,7 +91,7 @@ final class MainMenuBar extends MenuBar {
         newItem.setAccelerator(getCtrl("n"));
         newItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                main.handleNewFile();
+                app.handleNewFile();
             }
         });
 
@@ -99,7 +99,7 @@ final class MainMenuBar extends MenuBar {
         openItem.setAccelerator(getCtrl("o"));
         openItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                main.handleFileOpen();
+                app.handleFileOpen();
             }
         });
 
@@ -112,7 +112,7 @@ final class MainMenuBar extends MenuBar {
         saveAsItem.setAccelerator(getCtrl("s+shift"));
         saveAsItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                main.handleSaveAsAction();
+                app.handleSaveAsAction();
             }
         });
 
@@ -120,7 +120,7 @@ final class MainMenuBar extends MenuBar {
         importItem.setAccelerator(getCtrl("i"));
         importItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                main.handleOpenFileWithOptions();
+                app.handleOpenFileWithOptions();
             }
         });
 
@@ -133,17 +133,17 @@ final class MainMenuBar extends MenuBar {
         MenuItem resourceBundleItem = new MenuItem(getString("file.export.resourcebundle"));
         exportJsonItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                main.handleExportJsonAction();
+                app.handleExportJsonAction();
             }
         });
         exportXmlItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                main.handleExportXmlAction();
+                app.handleExportXmlAction();
             }
         });
         exportHtmlItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                main.handleExportHtmlAction();
+                app.handleExportHtmlAction();
             }
         });
         exportMenu.getItems().addAll(exportJsonItem, exportXmlItem, exportHtmlItem, resourceBundleItem);
@@ -152,7 +152,7 @@ final class MainMenuBar extends MenuBar {
         printItem.setAccelerator(getCtrl("p"));
         printItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                main.handlePrintAction();
+                app.handlePrintAction();
             }
         });
         fileMenu.getItems().addAll(newItem, openItem, openRecentMenu, saveItem, saveAsItem, new SeparatorMenuItem(),
@@ -176,21 +176,21 @@ final class MainMenuBar extends MenuBar {
         cutItem.setAccelerator(getCtrl("x"));
         cutItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                main.handleCutAction();
+                app.handleCutAction();
             }
         });
 
         MenuItem copyItem = new MenuItem(getString("edit.copy"));
         copyItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                main.handleCopyAction();
+                app.handleCopyAction();
             }
         });
         copyItem.setAccelerator(getCtrl("c"));
         MenuItem pasteItem = new MenuItem(getString("edit.paste"));
         pasteItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                main.handlePasteAction();
+                app.handlePasteAction();
             }
         });
         pasteItem.setAccelerator(getCtrl("v"));
@@ -198,7 +198,7 @@ final class MainMenuBar extends MenuBar {
         deleteItem.setAccelerator(KeyCombination.keyCombination("delete"));
         deleteItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                main.handleDeleteAction();
+                app.handleDeleteAction();
             }
         });
 
@@ -206,14 +206,14 @@ final class MainMenuBar extends MenuBar {
         moveUpItem.setAccelerator(getCtrl("" + KeyCode.UP));
         moveUpItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                main.handleMoveUpAction();
+                app.handleMoveUpAction();
             }
         });
         MenuItem moveDownItem = new MenuItem(getString("edit.movedown"));
         moveDownItem.setAccelerator(getCtrl("" + KeyCode.DOWN));
         moveDownItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                main.handleMoveDownAction();
+                app.handleMoveDownAction();
             }
         });
         edit.getItems().addAll(cutItem, copyItem, pasteItem, deleteItem,
@@ -234,7 +234,7 @@ final class MainMenuBar extends MenuBar {
         MenuItem newQueryMenuItem = new MenuItem(getString("query.new"));
         newQueryMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                main.handleNewQuery();
+                app.handleNewQuery();
             }
         });
         queryMenu.getItems().addAll(newQueryMenuItem);
@@ -253,21 +253,21 @@ final class MainMenuBar extends MenuBar {
         newColumnItem.setAccelerator(getCtrl("i"));
         newColumnItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                main.handleNewColumnAction();
+                app.handleNewColumnAction();
             }
         });
         MenuItem newRowItem = new MenuItem(getString("insert.row"));
         newRowItem.setAccelerator(getCtrl("R"));
         newRowItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                main.handleNewRowAction();
+                app.handleNewRowAction();
             }
         });
         MenuItem headersRowItem = new MenuItem(getString("insert.headers"));
         headersRowItem.setAccelerator(getCtrl("H"));
         headersRowItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                main.handleNewHeaders();
+                app.handleNewHeaders();
             }
         });
         insert.getItems().addAll(newColumnItem, newRowItem, headersRowItem);
@@ -290,7 +290,7 @@ final class MainMenuBar extends MenuBar {
         viewResultsMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
                 setSelectedMode(ViewMode.Results);
-                main.handleViewResultsAction();
+                app.handleViewResultsAction();
             }
         });
 
@@ -299,7 +299,7 @@ final class MainMenuBar extends MenuBar {
         viewChartMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
                 setSelectedMode(ViewMode.Chart);
-                main.handleViewChartAction();
+                app.handleViewChartAction();
 
             }
         });
@@ -309,7 +309,7 @@ final class MainMenuBar extends MenuBar {
         previewMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
                 setSelectedMode(ViewMode.Preview);
-                main.handleViewPreviewAction();
+                app.handleViewPreviewAction();
 
             }
         });
@@ -319,7 +319,7 @@ final class MainMenuBar extends MenuBar {
         wikipediaMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
                 setSelectedMode(ViewMode.Wikipedia);
-                main.handleViewWikipediaAction();
+                app.handleViewWikipediaAction();
 
             }
         });
@@ -329,7 +329,7 @@ final class MainMenuBar extends MenuBar {
         googleMapsMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
                 setSelectedMode(ViewMode.Maps);
-                main.handleViewGoogleMapsAction();
+                app.handleViewGoogleMapsAction();
 
             }
         });
@@ -339,7 +339,7 @@ final class MainMenuBar extends MenuBar {
         googleSearchMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
                 setSelectedMode(ViewMode.Search);
-                main.handleViewGoogleSearchAction();
+                app.handleViewGoogleSearchAction();
 
             }
         });
@@ -362,7 +362,7 @@ final class MainMenuBar extends MenuBar {
             MenuItem openRecentItem = new MenuItem(file.getAbsolutePath());
             openRecentItem.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(final ActionEvent t) {
-                    main.loadFile(file);
+                    app.loadFile(file);
                 }
             });
             openRecentMenu.getItems().add(openRecentItem);

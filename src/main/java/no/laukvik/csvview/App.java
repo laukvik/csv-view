@@ -19,7 +19,6 @@ import no.laukvik.csv.CSV;
 import no.laukvik.csv.Row;
 import no.laukvik.csv.columns.*;
 import no.laukvik.csv.io.CsvReaderException;
-import no.laukvik.csv.query.ValueMatcher;
 import no.laukvik.csvview.chart.ChartBuilder;
 import no.laukvik.csvview.column.ColumnController;
 import no.laukvik.csvview.column.ColumnListener;
@@ -60,7 +59,7 @@ import static no.laukvik.csvview.utils.Formatter.*;
  *
  * @author Morten Laukvik
  */
-public final class Main extends Application implements ColumnListener, PivotListener {
+public final class App extends Application implements ColumnListener, PivotListener {
 
     /**
      * The vertical divider position.
@@ -98,7 +97,7 @@ public final class Main extends Application implements ColumnListener, PivotList
     /**
      * The MenuBar and all it.
      */
-    private MainMenuBar menuBar;
+    private AppMenu menuBar;
     /**
      * The ScrollPane to display results and other components in.
      */
@@ -161,7 +160,7 @@ public final class Main extends Application implements ColumnListener, PivotList
         SplitPane.setResizableWithParent(tableSplit, Boolean.FALSE);
 
         final VBox topContainer = new VBox();
-        menuBar = new MainMenuBar(this);
+        menuBar = new AppMenu(this);
         topContainer.getChildren().add(menuBar);
         summaryBar = new SummaryBar(bundle);
         root = new BorderPane();
