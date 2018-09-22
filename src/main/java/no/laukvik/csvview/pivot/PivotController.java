@@ -127,8 +127,4 @@ public class PivotController extends TabPane implements PivotFilterListener {
         return (PivotTableView) getTabs().get(tabIndex).getContent();
     }
 
-    public List<ValueMatcher> getMatchers() {
-        return null;
-    }
-
 }

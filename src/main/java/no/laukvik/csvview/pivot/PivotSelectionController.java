@@ -1,15 +1,16 @@
 package no.laukvik.csvview.pivot;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.FlowPane;
 
 public class PivotSelectionController extends ScrollPane implements PivotListener {
 
-
-    private PivotSelection pivotSelection;
     private FlowPane flow;
 
     public PivotSelectionController() {
@@ -27,9 +28,15 @@ public class PivotSelectionController extends ScrollPane implements PivotListene
 
     public Button buildbutton(PivotFilter filter){
         Button b = new Button();
-//        String label = filter.getColumn().getName() + " - " + filter.labelProperty().getValue();
+        b.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                filter.selectedProperty().set(false);
+            }
+        });
         String label = filter.labelProperty().getValue();
         b.setText(label);
+        b.setTooltip(new Tooltip(filter.getColumn().getName()));
         return b;
     }
 
@@ -40,13 +47,13 @@ public class PivotSelectionController extends ScrollPane implements PivotListene
 
     @Override
     public void pivotChanged(PivotFilter filter, PivotSelection selection) {
-        this.pivotSelection = selection;
         flow.getChildren().clear();
-        pivotSelection.getFilters().forEach(f -> flow.getChildren().add(buildbutton(f)));
+        selection.getFilters().forEach(f -> flow.getChildren().add(buildbutton(f)));
     }
 
     @Override
     public void pivotTabChanged(Tab tab) {
 
     }
+
 }
