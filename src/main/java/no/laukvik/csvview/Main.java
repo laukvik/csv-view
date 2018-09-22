@@ -238,6 +238,8 @@ public final class Main extends Application implements ColumnListener, PivotList
         columnController.setItems(observableArrayList());
         pivotController.setColumn(null);
         resultsTable.clearAll();
+        contentController.openEmpty();
+        menuBar.setDefault();
         updateToolbar();
     }
 
@@ -283,6 +285,8 @@ public final class Main extends Application implements ColumnListener, PivotList
             resultsTable.clearAll();
             resultsTable.setColumns(csv.getColumns());
             resultsTable.setCSV(csv);
+            contentController.openResults(resultsTable);
+            menuBar.setDefault();
             showWelcomeScreen(false);
             updateAll();
         } catch (CsvReaderException e) {

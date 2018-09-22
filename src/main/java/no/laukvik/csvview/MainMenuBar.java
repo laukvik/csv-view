@@ -14,6 +14,7 @@ import no.laukvik.csvview.utils.Builder;
 import no.laukvik.csvview.utils.RecentFiles;
 
 import java.io.File;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static no.laukvik.csvview.utils.Builder.isMac;
@@ -153,6 +154,8 @@ final class MainMenuBar extends MenuBar {
         fileMenu.getItems().addAll(newItem, openItem, openRecentMenu, saveItem, saveAsItem, new SeparatorMenuItem(),
                 importItem, exportMenu, new SeparatorMenuItem(), printItem);
 
+        List.of(saveItem, saveAsItem, importItem, exportMenu, printItem).forEach(menuItem -> menuItem.setDisable(true));
+
         return fileMenu;
     }
 
@@ -212,6 +215,7 @@ final class MainMenuBar extends MenuBar {
         edit.getItems().addAll(cutItem, copyItem, pasteItem, deleteItem,
                 new SeparatorMenuItem(), moveUpItem, moveDownItem);
 
+        edit.getItems().forEach(menuItem -> menuItem.setDisable(true));
         return edit;
     }
 
@@ -264,6 +268,7 @@ final class MainMenuBar extends MenuBar {
         });
         insert.getItems().addAll(newColumnItem, newRowItem, headersRowItem);
 
+        insert.getItems().forEach(menuItem -> menuItem.setDisable(true));
 
         return insert;
     }
@@ -383,4 +388,7 @@ final class MainMenuBar extends MenuBar {
         }
     }
 
+    public void setDefault() {
+        setSelectedMode(ViewMode.Results);
+    }
 }
