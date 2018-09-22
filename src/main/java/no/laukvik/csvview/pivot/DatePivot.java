@@ -53,9 +53,6 @@ public class DatePivot extends AbstractPivot<DateColumn> {
 
     public void loadCSV(final CSV csv) {
         getTabs().forEach(PivotTab::clear);
-
-        ResourceBundle bundle = Builder.getBundle();
-
         DateColumn column = getColumn();
 
         FrequencyDistribution<Date> uniqueDistribution = new FrequencyDistribution<>(column);
@@ -134,13 +131,13 @@ public class DatePivot extends AbstractPivot<DateColumn> {
         if (monthDistribution.getNullCount() > 0) {
             monthTab.addPivotFilter(new PivotFilter(false,
                     EMPTY, null, monthDistribution.getNullCount(),
-                    getColumn(), PivotType.DATE_YEAR,
+                    getColumn(), PivotType.DATE_MONTH,
                     this.getListener()));
         }
         for (Integer key : monthDistribution.getKeys()) {
             monthTab.addPivotFilter(new PivotFilter(false,
                     getLanguage("date.month." + key), key, monthDistribution.getCount(key),
-                    getColumn(), PivotType.DATE_YEAR,
+                    getColumn(), PivotType.DATE_MONTH,
                     this.getListener()));
         }
 
