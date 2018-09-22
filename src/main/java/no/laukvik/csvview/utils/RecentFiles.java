@@ -7,7 +7,9 @@ import no.laukvik.csv.io.CsvReaderException;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static no.laukvik.csvview.utils.Builder.getApplication;
 import static no.laukvik.csvview.utils.Builder.getLibrary;
@@ -107,9 +109,9 @@ public final class RecentFiles {
      *
      * @return the list
      */
-    public List<File> getList() {
+    public Set<File> getList() {
         StringColumn c = (StringColumn) csv.getColumn(0);
-        List<File> list = new ArrayList<>();
+        Set<File> list = new HashSet<>();
         for (int y = 0; y < csv.getRowCount(); y++) {
             Row r = csv.getRow(y);
             list.add(new File(r.get(c)));
