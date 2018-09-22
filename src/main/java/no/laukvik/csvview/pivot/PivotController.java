@@ -12,7 +12,6 @@ import java.util.List;
 
 public class PivotController extends TabPane implements PivotFilterListener {
 
-    private Column column;
     private List<PivotListener> listeners;
     private PivotSelection pivotSelection;
 
@@ -63,7 +62,6 @@ public class PivotController extends TabPane implements PivotFilterListener {
     }
 
     public void setColumn(Column column){
-        this.column = column;
         getTabs().clear();
 
         if (column == null){
@@ -115,7 +113,7 @@ public class PivotController extends TabPane implements PivotFilterListener {
 
     }
 
-    public PivotFilter getSelectedPivotFilter() {
+    public PivotFilter getFocusedPivotFilter() {
         int tabIndex = getSelectionModel().getSelectedIndex();
         if (tabIndex == -1){
             return null;

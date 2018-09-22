@@ -19,7 +19,6 @@ import no.laukvik.csv.CSV;
 import no.laukvik.csv.Row;
 import no.laukvik.csv.columns.*;
 import no.laukvik.csv.io.CsvReaderException;
-import no.laukvik.csv.query.Query;
 import no.laukvik.csv.query.ValueMatcher;
 import no.laukvik.csvview.chart.ChartBuilder;
 import no.laukvik.csvview.column.ColumnController;
@@ -39,7 +38,6 @@ import no.laukvik.csvview.utils.RecentFiles;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -109,10 +107,7 @@ public final class Main extends Application implements ColumnListener, PivotList
      * The view mode.
      */
     private ViewMode viewMode = ViewMode.Results;
-    /**
-     * The query model.
-     */
-    private QueryModel queryModel;
+
     /**
      * The summaryBar.
      */
@@ -191,15 +186,6 @@ public final class Main extends Application implements ColumnListener, PivotList
     }
 
     /**
-     * Returns the QueryModel being used.
-     *
-     * @return the QueryModel
-     */
-    public QueryModel getQueryModel() {
-        return queryModel;
-    }
-
-    /**
      * Sets the selected column by it index.
      *
      * @param selectedColumnIndex the selectedColumnIndex
@@ -249,7 +235,6 @@ public final class Main extends Application implements ColumnListener, PivotList
     public void handleNewFile() {
         csv = new CSV();
         showWelcomeScreen(true);
-        queryModel = new QueryModel();
         columnController.setItems(observableArrayList());
         pivotController.setColumn(null);
         resultsTable.clearAll();
@@ -291,7 +276,6 @@ public final class Main extends Application implements ColumnListener, PivotList
                 csv.setSeparator(separatorChar);
                 csv.readFile(file);
             }
-            queryModel = new QueryModel();
             if (csv.getFile() != null) {
                 recentFiles.open(file);
                 menuBar.buildRecentList(recentFiles);
@@ -330,24 +314,6 @@ public final class Main extends Application implements ColumnListener, PivotList
         alert.setHeaderText(message);
         alert.showAndWait();
     }
-
-
-
-    /**
-     * Implemented by ChangeListener.
-     *
-     * @param rowIndex the index which was removed
-     * @param row      the row
-     */
-    public final void rowCreated(final int rowIndex, final Row row) {
-        if (rowIndex == resultsTable.getItems().size() + 1) {
-            resultsTable.getItems().add(new ObservableRow(row, csv));
-        } else {
-            resultsTable.getItems().add(rowIndex, new ObservableRow(row, csv));
-        }
-        updateToolbar();
-    }
-
 
     /**
      * Handles the delete action.
@@ -662,54 +628,6 @@ public final class Main extends Application implements ColumnListener, PivotList
         }
     }
 
-    public void handleSelectionChanged(final Column column) {
-
-        List<ValueMatcher> matchers = pivotController.getMatchers();
-        List<Row> rows = csv.findRowsByMatchers(matchers);
-        List<ObservableRow> list = new ArrayList<>();
-        for (int y = 0; y < rows.size(); y++) {
-            list.add(new ObservableRow(rows.get(y), csv));
-        }
-        resultsTable.getItems().clear();
-        resultsTable.getItems().addAll(list);
-
-        if (viewMode == ViewMode.Chart) {
-            handleViewChartAction();
-        }
-    }
-
-    /**
-     * Adds a new selection with the value in that column.
-     *
-     * @param column the column
-     * @param value  the value of the column
-     */
-    public final void handleSelected(final Column column, final String value) {
-////        getQueryModel().addSelection(column, value);
-//        List<ObservableRow> list = getQueryModel().buildObservableRows();
-//        resultsTable.getItems().clear();
-//        resultsTable.getItems().addAll(list);
-//        if (viewMode == ViewMode.Chart) {
-//            handleViewChartAction();
-//        }
-    }
-
-    /**
-     * Removes the selection with the value in that column.
-     *
-     * @param column the column
-     * @param value  the value of the column
-     */
-    public final void handleUnselected(final Column column, final String value) {
-//        getQueryModel().removeSelection(column, value);
-//        List<ObservableRow> list = getQueryModel().buildObservableRows();
-//        resultsTable.getItems().clear();
-//        resultsTable.getItems().addAll(list);
-//        if (viewMode == ViewMode.Chart) {
-//            handleViewChartAction();
-//        }
-    }
-
     /**
      * Handles new query action.
      */
@@ -730,16 +648,16 @@ public final class Main extends Application implements ColumnListener, PivotList
                 contentController.openPieChart(chart);
             }
         } else if (viewMode == ViewMode.Maps) {
-            PivotFilter ofd = pivotController.getSelectedPivotFilter();
+            PivotFilter ofd = pivotController.getFocusedPivotFilter();
             contentController.openGoogleMaps(ofd);
         } else if (viewMode == ViewMode.Preview) {
-            PivotFilter ofd = pivotController.getSelectedPivotFilter();
+            PivotFilter ofd = pivotController.getFocusedPivotFilter();
             contentController.openPreview(ofd, csv);
         } else if (viewMode == ViewMode.Search) {
-            PivotFilter ofd = pivotController.getSelectedPivotFilter();
+            PivotFilter ofd = pivotController.getFocusedPivotFilter();
             contentController.openGoogleSearch(ofd);
         } else if (viewMode == ViewMode.Wikipedia) {
-            PivotFilter ofd = pivotController.getSelectedPivotFilter();
+            PivotFilter ofd = pivotController.getFocusedPivotFilter();
             contentController.openWikipedia(ofd);
         }
     }

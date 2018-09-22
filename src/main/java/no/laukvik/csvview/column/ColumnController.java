@@ -34,6 +34,10 @@ public class ColumnController extends TableView<ObservableColumn> {
      */
     private static final float CHECKBOX_RATIO = 0.2f;
     /**
+     * The width of the type column.
+     */
+    private static final int TYPE_WIDTH = 96;
+    /**
      * The width ratio of column.
      */
     private static final float COLUMN_RATIO = 1 - CHECKBOX_RATIO;
@@ -50,13 +54,13 @@ public class ColumnController extends TableView<ObservableColumn> {
         ResourceBundle bundle = Builder.getBundle();
         setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         setEditable(true);
-        final TableColumn<ObservableColumn, Boolean> checkboxColumn = new TableColumn<>("");
+        final TableColumn<ObservableColumn, Boolean> checkboxColumn = new TableColumn<>(bundle.getString("columncontroller.column_visible"));
         checkboxColumn.setMinWidth(CHECKBOX_WIDTH);
         checkboxColumn.setMaxWidth(CHECKBOX_WIDTH);
         checkboxColumn.setEditable(true);
         checkboxColumn.setCellValueFactory(new PropertyValueFactory<>("visible"));
         checkboxColumn.setCellFactory(CheckBoxTableCell.forTableColumn(checkboxColumn));
-        final TableColumn columnNameColumn = new TableColumn(bundle.getString("table.columns"));
+        final TableColumn columnNameColumn = new TableColumn(bundle.getString("columncontroller.column_name"));
         columnNameColumn.setCellValueFactory(new PropertyValueFactory<ObservableColumn, String>("name"));
         columnNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         columnNameColumn.setOnEditCommit(
@@ -72,6 +76,12 @@ public class ColumnController extends TableView<ObservableColumn> {
             }
         );
 
+        final TableColumn<ObservableColumn, String> typeColumn = new TableColumn(bundle.getString("columncontroller.column_type"));
+        typeColumn.setCellValueFactory(new PropertyValueFactory<>("columnType"));
+        typeColumn.setPrefWidth(TYPE_WIDTH);
+        typeColumn.setMinWidth(TYPE_WIDTH);
+        typeColumn.setMaxWidth(TYPE_WIDTH);
+
         getSelectionModel().getSelectedIndices().addListener(new ListChangeListener<Integer>() {
             @Override
             public void onChanged(final Change<? extends Integer> c) {
@@ -82,12 +92,11 @@ public class ColumnController extends TableView<ObservableColumn> {
             }
         });
 
-        getColumns().addAll(checkboxColumn, columnNameColumn);
+        getColumns().addAll(checkboxColumn, columnNameColumn, typeColumn);
         /* Resizing */
         setPlaceholder(new Label(bundle.getString("table.columns.empty")));
         checkboxColumn.prefWidthProperty().bind(widthProperty().multiply(CHECKBOX_RATIO));
         columnNameColumn.prefWidthProperty().bind(widthProperty().multiply(COLUMN_RATIO));
-
     }
 
     public List<Column> getSelectedColumns(){

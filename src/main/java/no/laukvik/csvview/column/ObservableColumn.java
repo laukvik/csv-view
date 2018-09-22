@@ -22,6 +22,7 @@ public final class ObservableColumn {
      * The property for name.
      */
     private final SimpleStringProperty name;
+    private final SimpleStringProperty columnType;
     /** The Column its for. */
     private final Column column;
 
@@ -33,6 +34,7 @@ public final class ObservableColumn {
     public ObservableColumn(final Column column, final ColumnController controller) {
         visible = new SimpleBooleanProperty(true);
         name = new SimpleStringProperty(column.getName());
+        columnType = new SimpleStringProperty(column.getClass().getSimpleName().replaceAll("Column", ""));
         this.column = column;
         visible.addListener(new ChangeListener<Boolean>() {
             @Override
@@ -58,6 +60,14 @@ public final class ObservableColumn {
      */
     public SimpleStringProperty nameProperty() {
         return name;
+    }
+
+    public String getColumnType() {
+        return columnType.get();
+    }
+
+    public SimpleStringProperty columnTypeProperty() {
+        return columnType;
     }
 
     /**

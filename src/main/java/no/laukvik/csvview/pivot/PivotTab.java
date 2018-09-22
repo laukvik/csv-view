@@ -14,7 +14,7 @@ public class PivotTab extends Tab {
     private PivotFilterListener listener;
 
     public PivotTab(PivotType pivotType, Column column, PivotFilterListener listener) {
-        super(Builder.getBundle().getString("pivot." + pivotType.name().toLowerCase().replace("_", ".")));
+        super(Builder.getBundle().getString("pivotcontroller." + pivotType.name().toLowerCase().replace("_", ".")));
         this.pivotType = pivotType;
         this.column = column;
         this.tableView = new PivotTableView(pivotType, listener);

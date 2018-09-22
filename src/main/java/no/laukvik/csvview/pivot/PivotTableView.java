@@ -61,7 +61,7 @@ public final class PivotTableView extends TableView<PivotFilter> {
         ResourceBundle bundle = Builder.getBundle();
         setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         setEditable(true);
-        setPlaceholder(new Label(bundle.getString("pivot.unique.empty")));
+        setPlaceholder(new Label(bundle.getString("pivotcontroller.unique.empty")));
         selectUniqueColumn = new TableColumn("");
         selectUniqueColumn.setSortable(false);
         selectUniqueColumn.setMinWidth(SELECT_WIDTH);
@@ -72,7 +72,7 @@ public final class PivotTableView extends TableView<PivotFilter> {
         selectUniqueColumn.setCellFactory(CheckBoxTableCell.forTableColumn(selectUniqueColumn));
         selectUniqueColumn.setEditable(true);
         getColumns().add(selectUniqueColumn);
-        valueUniqueColumn = new TableColumn(bundle.getString("pivot"));
+        valueUniqueColumn = new TableColumn(bundle.getString("pivotcontroller"));
         valueUniqueColumn.setCellValueFactory(
                 new PropertyValueFactory<PivotFilter, String>("label")
         );
