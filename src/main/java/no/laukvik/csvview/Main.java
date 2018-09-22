@@ -631,10 +631,7 @@ public final class Main extends Application implements ColumnListener, PivotList
      * Handles new query action.
      */
     public final void handleNewQuery() {
-//        getQueryModel().clearSelections();
-//        List<ObservableRow> list = getQueryModel().buildObservableRows();
-//        resultsTable.getItems().clear();
-//        resultsTable.getItems().addAll(list);
+        pivotController.clearSelections();
     }
 
     public void handleTabChanged() {

@@ -127,4 +127,9 @@ public class PivotController extends TabPane implements PivotFilterListener {
         return (PivotTableView) getTabs().get(tabIndex).getContent();
     }
 
+    public void clearSelections() {
+        List<PivotFilter> filters = List.copyOf(pivotSelection.getFilters());
+        filters.forEach(filter -> filter.selectedProperty().set(false));
+        pivotSelection.clear();
+    }
 }

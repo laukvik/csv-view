@@ -39,7 +39,7 @@ final public class Builder {
      * @return the ResourceBundle
      */
     public static ResourceBundle getBundle() {
-        return ResourceBundle.getBundle("messages", Locale.getDefault());
+        return ResourceBundle.getBundle("messages");
     }
 
     public static ResourceBundle getBundle(Locale locale) {
