@@ -94,7 +94,7 @@ public class ColumnController extends TableView<ObservableColumn> {
 
         getColumns().addAll(checkboxColumn, columnNameColumn, typeColumn);
         /* Resizing */
-        setPlaceholder(new Label(bundle.getString("table.columns.empty")));
+        setPlaceholder(new Label(bundle.getString("columncontroller.empty")));
         checkboxColumn.prefWidthProperty().bind(widthProperty().multiply(CHECKBOX_RATIO));
         columnNameColumn.prefWidthProperty().bind(widthProperty().multiply(COLUMN_RATIO));
     }

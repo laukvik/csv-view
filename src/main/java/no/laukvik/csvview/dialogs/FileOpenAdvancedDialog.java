@@ -34,18 +34,18 @@ public class FileOpenAdvancedDialog extends Dialog {
         separatorBox = new ChoiceBox();
         charsetBox = new ChoiceBox();
         setTitle(bundle.getString("app.title"));
-        setHeaderText(bundle.getString("dialog.file.open"));
+        setHeaderText(bundle.getString("fileopenadvanceddialog"));
 
         final GridPane gridpane = new GridPane();
         gridpane.setPadding(new Insets(DIALOG_PADDING, DIALOG_PADDING, DIALOG_PADDING, DIALOG_PADDING));
         gridpane.setHgap(DIALOG_PADDING);
         gridpane.setVgap(DIALOG_PADDING);
 
-        final Label sepLabel = new Label(bundle.getString("metadata.separator"));
+        final Label sepLabel = new Label(bundle.getString("fileopenadvanceddialog.separator"));
         gridpane.add(sepLabel, 0, 1);
 
         List<String> items = new ArrayList<>();
-        items.add(bundle.getString("metadata.separator.autodetect"));
+        items.add(bundle.getString("fileopenadvanceddialog.separator.autodetect"));
         for (char c : listSupportedSeparatorChars()) {
             items.add(getSeparatorString(c));
         }
@@ -53,10 +53,10 @@ public class FileOpenAdvancedDialog extends Dialog {
         gridpane.add(separatorBox, 1, 1);
         separatorBox.getSelectionModel().select(0);
 
-        final Label charsetLabel = new Label(bundle.getString("metadata.encoding"));
+        final Label charsetLabel = new Label(bundle.getString("fileopenadvanceddialog.encoding"));
         gridpane.add(charsetLabel, 0, 2);
 
-        charsetBox.getItems().add(bundle.getString("metadata.encoding.autodetect"));
+        charsetBox.getItems().add(bundle.getString("fileopenadvanceddialog.encoding.autodetect"));
         for (BOM b : BOM.values()) {
             charsetBox.getItems().add(b.name());
         }
@@ -94,7 +94,7 @@ public class FileOpenAdvancedDialog extends Dialog {
         ButtonType resultButtonType = (ButtonType) getResult();
         if (resultButtonType.getButtonData().equals(ButtonBar.ButtonData.OK_DONE)) {
             final FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle(bundle.getString("dialog.file.open"));
+            fileChooser.setTitle(bundle.getString("fileopenadvanceddialog"));
             fileChooser.setSelectedExtensionFilter(FileChooserExtensions.buildCSV());
             return fileChooser.showOpenDialog(stage);
         }

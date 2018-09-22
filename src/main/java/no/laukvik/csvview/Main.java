@@ -152,17 +152,12 @@ public final class Main extends Application implements ColumnListener, PivotList
         contentController = new ContentController();
         contentController.openResults(resultsTable);
 
-
-
-
         final SplitPane tableSplit = new SplitPane(columnsScroll, pivotController, pivotSelectionController);
         tableSplit.setOrientation(Orientation.VERTICAL);
         tableSplit.setDividerPositions(0.2, 0.9, 0.1);
         mainSplit = new SplitPane(tableSplit, contentController);
         mainSplit.setDividerPositions(DIVIDER_POSITION_V);
 
-//        tableSplit.setPrefWidth(250);
-//        tableSplit.setMinWidth(250);
         SplitPane.setResizableWithParent(tableSplit, Boolean.FALSE);
 
         final VBox topContainer = new VBox();
@@ -177,7 +172,6 @@ public final class Main extends Application implements ColumnListener, PivotList
         final java.awt.Dimension percent = Builder.getPercentSize(0.8f, 0.7f);
         final Scene scene = new Scene(root, percent.getWidth(), percent.getHeight());
         stage.setScene(scene);
-
 
         stage.show();
         recentFiles = new RecentFiles(RecentFiles.getConfigurationFile());
@@ -286,6 +280,7 @@ public final class Main extends Application implements ColumnListener, PivotList
             resultsTable.setColumns(csv.getColumns());
             resultsTable.setCSV(csv);
             contentController.openResults(resultsTable);
+            viewMode = ViewMode.Results;
             menuBar.setDefault();
             showWelcomeScreen(false);
             updateAll();

@@ -75,6 +75,10 @@ final class MainMenuBar extends MenuBar {
             return KeyCombination.keyCombination("Alt+" + key);
         }
     }
+    
+    private String getString(String key){
+        return bundle.getString("mainmenubar." + key);
+    }
 
     /**
      * Builds the file menu.
@@ -82,8 +86,8 @@ final class MainMenuBar extends MenuBar {
      * @return the menu
      */
     private Menu buildFileMenu() {
-        final Menu fileMenu = new Menu(bundle.getString("file"));
-        MenuItem newItem = new MenuItem(bundle.getString("file.new"));
+        final Menu fileMenu = new Menu(getString("file"));
+        MenuItem newItem = new MenuItem(getString("file.new"));
         newItem.setAccelerator(getCtrl("n"));
         newItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
@@ -91,7 +95,7 @@ final class MainMenuBar extends MenuBar {
             }
         });
 
-        MenuItem openItem = new MenuItem(bundle.getString("file.open"));
+        MenuItem openItem = new MenuItem(getString("file.open"));
         openItem.setAccelerator(getCtrl("o"));
         openItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
@@ -100,11 +104,11 @@ final class MainMenuBar extends MenuBar {
         });
 
         // ------ RecentFiles files ------
-        openRecentMenu = new Menu(bundle.getString("file.recent"));
+        openRecentMenu = new Menu(getString("file.recent"));
 
-        MenuItem saveItem = new MenuItem(bundle.getString("file.save"));
+        MenuItem saveItem = new MenuItem(getString("file.save"));
         saveItem.setAccelerator(getCtrl("s"));
-        MenuItem saveAsItem = new MenuItem(bundle.getString("file.saveas"));
+        MenuItem saveAsItem = new MenuItem(getString("file.saveas"));
         saveAsItem.setAccelerator(getCtrl("s+shift"));
         saveAsItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
@@ -112,7 +116,7 @@ final class MainMenuBar extends MenuBar {
             }
         });
 
-        MenuItem importItem = new MenuItem(bundle.getString("file.import"));
+        MenuItem importItem = new MenuItem(getString("file.import"));
         importItem.setAccelerator(getCtrl("i"));
         importItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
@@ -121,12 +125,12 @@ final class MainMenuBar extends MenuBar {
         });
 
 
-        final Menu exportMenu = new Menu(bundle.getString("file.export"));
+        final Menu exportMenu = new Menu(getString("file.export"));
 
-        MenuItem exportJsonItem = new MenuItem(bundle.getString("file.export.json"));
-        MenuItem exportXmlItem = new MenuItem(bundle.getString("file.export.xml"));
-        MenuItem exportHtmlItem = new MenuItem(bundle.getString("file.export.html"));
-        MenuItem resourceBundleItem = new MenuItem(bundle.getString("file.export.resourcebundle"));
+        MenuItem exportJsonItem = new MenuItem(getString("file.export.json"));
+        MenuItem exportXmlItem = new MenuItem(getString("file.export.xml"));
+        MenuItem exportHtmlItem = new MenuItem(getString("file.export.html"));
+        MenuItem resourceBundleItem = new MenuItem(getString("file.export.resourcebundle"));
         exportJsonItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
                 main.handleExportJsonAction();
@@ -144,7 +148,7 @@ final class MainMenuBar extends MenuBar {
         });
         exportMenu.getItems().addAll(exportJsonItem, exportXmlItem, exportHtmlItem, resourceBundleItem);
 
-        MenuItem printItem = new MenuItem(bundle.getString("file.print"));
+        MenuItem printItem = new MenuItem(getString("file.print"));
         printItem.setAccelerator(getCtrl("p"));
         printItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
@@ -167,8 +171,8 @@ final class MainMenuBar extends MenuBar {
     private Menu buildEditMenu() {
 
         // ----- Edit ------
-        final Menu edit = new Menu(bundle.getString("edit"));
-        MenuItem cutItem = new MenuItem(bundle.getString("edit.cut"));
+        final Menu edit = new Menu(getString("edit"));
+        MenuItem cutItem = new MenuItem(getString("edit.cut"));
         cutItem.setAccelerator(getCtrl("x"));
         cutItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
@@ -176,21 +180,21 @@ final class MainMenuBar extends MenuBar {
             }
         });
 
-        MenuItem copyItem = new MenuItem(bundle.getString("edit.copy"));
+        MenuItem copyItem = new MenuItem(getString("edit.copy"));
         copyItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
                 main.handleCopyAction();
             }
         });
         copyItem.setAccelerator(getCtrl("c"));
-        MenuItem pasteItem = new MenuItem(bundle.getString("edit.paste"));
+        MenuItem pasteItem = new MenuItem(getString("edit.paste"));
         pasteItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
                 main.handlePasteAction();
             }
         });
         pasteItem.setAccelerator(getCtrl("v"));
-        MenuItem deleteItem = new MenuItem(bundle.getString("edit.delete"));
+        MenuItem deleteItem = new MenuItem(getString("edit.delete"));
         deleteItem.setAccelerator(KeyCombination.keyCombination("delete"));
         deleteItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
@@ -198,14 +202,14 @@ final class MainMenuBar extends MenuBar {
             }
         });
 
-        MenuItem moveUpItem = new MenuItem(bundle.getString("edit.moveup"));
+        MenuItem moveUpItem = new MenuItem(getString("edit.moveup"));
         moveUpItem.setAccelerator(getCtrl("" + KeyCode.UP));
         moveUpItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
                 main.handleMoveUpAction();
             }
         });
-        MenuItem moveDownItem = new MenuItem(bundle.getString("edit.movedown"));
+        MenuItem moveDownItem = new MenuItem(getString("edit.movedown"));
         moveDownItem.setAccelerator(getCtrl("" + KeyCode.DOWN));
         moveDownItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
@@ -226,8 +230,8 @@ final class MainMenuBar extends MenuBar {
      */
     private Menu buildQueryMenu() {
         // ----- QueryModel ------
-        final Menu queryMenu = new Menu(bundle.getString("query"));  // Clear query
-        MenuItem newQueryMenuItem = new MenuItem(bundle.getString("query.new"));
+        final Menu queryMenu = new Menu(getString("query"));  // Clear query
+        MenuItem newQueryMenuItem = new MenuItem(getString("query.new"));
         newQueryMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
                 main.handleNewQuery();
@@ -244,22 +248,22 @@ final class MainMenuBar extends MenuBar {
      */
     private Menu buildInsertMenu() {
         // ----- Insert ------
-        final Menu insert = new Menu(bundle.getString("insert"));
-        MenuItem newColumnItem = new MenuItem(bundle.getString("insert.column"));
+        final Menu insert = new Menu(getString("insert"));
+        MenuItem newColumnItem = new MenuItem(getString("insert.column"));
         newColumnItem.setAccelerator(getCtrl("i"));
         newColumnItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
                 main.handleNewColumnAction();
             }
         });
-        MenuItem newRowItem = new MenuItem(bundle.getString("insert.row"));
+        MenuItem newRowItem = new MenuItem(getString("insert.row"));
         newRowItem.setAccelerator(getCtrl("R"));
         newRowItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
                 main.handleNewRowAction();
             }
         });
-        MenuItem headersRowItem = new MenuItem(bundle.getString("insert.headers"));
+        MenuItem headersRowItem = new MenuItem(getString("insert.headers"));
         headersRowItem.setAccelerator(getCtrl("H"));
         headersRowItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
@@ -279,8 +283,8 @@ final class MainMenuBar extends MenuBar {
      * @return the menu
      */
     private Menu buildViewMenu() {
-        Menu menu = new Menu(bundle.getString("view"));
-        CheckMenuItem viewResultsMenuItem = new CheckMenuItem(bundle.getString("view.results"));
+        Menu menu = new Menu(getString("view"));
+        CheckMenuItem viewResultsMenuItem = new CheckMenuItem(getString("view.results"));
         viewResultsMenuItem.setAccelerator(getAlt("1"));
         viewResultsMenuItem.setSelected(true);
         viewResultsMenuItem.setOnAction(new EventHandler<ActionEvent>() {
@@ -290,7 +294,7 @@ final class MainMenuBar extends MenuBar {
             }
         });
 
-        CheckMenuItem viewChartMenuItem = new CheckMenuItem(bundle.getString("view.piechart"));
+        CheckMenuItem viewChartMenuItem = new CheckMenuItem(getString("view.piechart"));
         viewChartMenuItem.setAccelerator(getAlt("2"));
         viewChartMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
@@ -300,7 +304,7 @@ final class MainMenuBar extends MenuBar {
             }
         });
 
-        CheckMenuItem previewMenuItem = new CheckMenuItem(bundle.getString("view.preview"));
+        CheckMenuItem previewMenuItem = new CheckMenuItem(getString("view.preview"));
         previewMenuItem.setAccelerator(getAlt("3"));
         previewMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
@@ -310,7 +314,7 @@ final class MainMenuBar extends MenuBar {
             }
         });
 
-        CheckMenuItem wikipediaMenuItem = new CheckMenuItem(bundle.getString("view.wikipedia"));
+        CheckMenuItem wikipediaMenuItem = new CheckMenuItem(getString("view.wikipedia"));
         wikipediaMenuItem.setAccelerator(getAlt("4"));
         wikipediaMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
@@ -320,7 +324,7 @@ final class MainMenuBar extends MenuBar {
             }
         });
 
-        CheckMenuItem googleMapsMenuItem = new CheckMenuItem(bundle.getString("view.googlemaps"));
+        CheckMenuItem googleMapsMenuItem = new CheckMenuItem(getString("view.googlemaps"));
         googleMapsMenuItem.setAccelerator(getAlt("5"));
         googleMapsMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
@@ -330,7 +334,7 @@ final class MainMenuBar extends MenuBar {
             }
         });
 
-        CheckMenuItem googleSearchMenuItem = new CheckMenuItem(bundle.getString("view.google"));
+        CheckMenuItem googleSearchMenuItem = new CheckMenuItem(getString("view.google"));
         googleSearchMenuItem.setAccelerator(getAlt("6"));
         googleSearchMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
@@ -364,7 +368,7 @@ final class MainMenuBar extends MenuBar {
             openRecentMenu.getItems().add(openRecentItem);
         }
         openRecentMenu.getItems().add(new SeparatorMenuItem());
-        MenuItem openRecentItem = new MenuItem(bundle.getString("file.recent.clear"));
+        MenuItem openRecentItem = new MenuItem(getString("file.recent.clear"));
         openRecentItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
                 recentFiles.clear();

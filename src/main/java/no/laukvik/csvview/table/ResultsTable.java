@@ -44,7 +44,7 @@ public class ResultsTable extends TableView<ObservableRow> {
         visibleColumns = new ArrayList<>();
         ResourceBundle bundle = Builder.getBundle();
         setEditable(true);
-        Label l = new Label(bundle.getString("table.results.empty"));
+        Label l = new Label(bundle.getString("resultstable.empty"));
         setPlaceholder(l);
         getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         clearAll();

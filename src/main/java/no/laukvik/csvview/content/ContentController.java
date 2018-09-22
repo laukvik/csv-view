@@ -44,7 +44,7 @@ public class ContentController extends ScrollPane {
 
     public Node getPreviewEmptyNode() {
         BorderPane pane = new BorderPane();
-        pane.centerProperty().setValue(new Label(bundle.getString("view.preview.empty")));
+        pane.centerProperty().setValue(new Label(bundle.getString("contentcontroller.preview.empty")));
         return pane;
     }
 
@@ -54,7 +54,7 @@ public class ContentController extends ScrollPane {
         } else {
             String filename = filter.labelProperty().getValue();
             if (filename == null || filename.trim().isEmpty()) {
-                setContent(new Label(bundle.getString("view.preview.empty")));
+                setContent(new Label(bundle.getString("contentcontroller.preview.empty")));
             } else if (filename.startsWith("http")) {
                 WebView v = new WebView();
                 WebEngine webEngine = v.getEngine();

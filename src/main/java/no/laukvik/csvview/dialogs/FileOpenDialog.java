@@ -14,7 +14,7 @@ public class FileOpenDialog {
     public FileOpenDialog(ResourceBundle bundle) {
         super();
         fileChooser = new FileChooser();
-        fileChooser.setTitle(bundle.getString("dialog.file.open"));
+        fileChooser.setTitle(bundle.getString("fileopendialog"));
         fileChooser.getExtensionFilters().clear();
         fileChooser.getExtensionFilters().addAll(FileChooserExtensions.buildCSV());
     }

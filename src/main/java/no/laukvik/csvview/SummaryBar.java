@@ -49,23 +49,23 @@ class SummaryBar extends ToolBar {
 
     public SummaryBar(final ResourceBundle bundle) {
         this.bundle = bundle;
-        Label rows = new Label(bundle.getString("status.rows"));
+        Label rows = new Label(bundle.getString("summarybar.status.rows"));
 
         rows.setDisable(true);
         rowsLabel = new Label("-");
-        Label cols = new Label(bundle.getString("status.columns"));
+        Label cols = new Label(bundle.getString("summarybar.status.columns"));
         cols.setDisable(true);
         colsLabel = new Label("-");
-        Label encoding = new Label(bundle.getString("status.encoding"));
+        Label encoding = new Label(bundle.getString("summarybar.status.encoding"));
         encoding.setDisable(true);
         encodingLabel = new Label("-");
-        Label size = new Label(bundle.getString("status.size"));
+        Label size = new Label(bundle.getString("summarybar.status.size"));
         size.setDisable(true);
         sizeLabel = new Label("-");
-        Label separator = new Label(bundle.getString("status.separator"));
+        Label separator = new Label(bundle.getString("summarybar.status.separator"));
         separator.setDisable(true);
         separatorLabel = new Label("-");
-        Label filetype = new Label(bundle.getString("status.filetype"));
+        Label filetype = new Label(bundle.getString("summarybar.status.filetype"));
         filetype.setDisable(true);
         fileTypeLabel = new Label("");
         progressBar = new ProgressBar();
