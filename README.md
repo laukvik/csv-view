@@ -6,3 +6,10 @@ You can read all common CSV formats:
 - comma separated files
 - pipe separated files
 - different encodings
+- with our without quotes
+
+# Screenshot
+
+Shows the application on Windows 10
+
+![Screenshot](screenshot.png)
