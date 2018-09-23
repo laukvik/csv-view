@@ -1,6 +1,6 @@
 # CSV
 
-This desktop application is able to read and display CSV files on multiple platforms.
+This desktop application is able to read and display [CSV](https://github.com/laukvik/CSV) files on multiple platforms.
 You can read all common CSV formats:
 - tab separated files
 - comma separated files
@@ -13,3 +13,8 @@ You can read all common CSV formats:
 Shows the application on Windows 10
 
 ![Screenshot](screenshot.png)
+
+# Download
+
+[CSV-1.0.exe](https://github.com/laukvik/csv-view/releases/download/v1.0/CSV-1.0.exe)
+
