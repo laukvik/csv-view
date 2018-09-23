@@ -1,0 +1,1 @@
+java --module-path ./target/jfx/app/lib -m no.laukvik.csvview/no.laukvik.csvview.App

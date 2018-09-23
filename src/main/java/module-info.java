@@ -1,8 +1,9 @@
 module no.laukvik.csvview {
-    requires javafx.controls;
+    requires java.base;
+    requires no.laukvik.csv;
+    requires transitive javafx.controls;
     requires javafx.web;
     requires java.desktop;
-    requires no.laukvik.csv;
     exports no.laukvik.csvview;
     exports no.laukvik.csvview.chart;
     exports no.laukvik.csvview.column;

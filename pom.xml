@@ -8,7 +8,7 @@
     <artifactId>csv-view</artifactId>
     <version>1.0.0</version>
 
-    <!--<packaging>bundle</packaging>-->
+    <packaging>jar</packaging>
 
     <name>csv-view</name>
     <description>A desktop application for showing CSV files.</description>
@@ -44,13 +44,13 @@
     <build>
         <resources>
             <resource>
-                <directory>src/app/java</directory>
+                <directory>src/main/java</directory>
                 <includes>
                     <include>**/*.java</include>
                 </includes>
             </resource>
             <resource>
-                <directory>src/app/resources</directory>
+                <directory>src/main/resources</directory>
                 <includes>
                     <include>**/*.properties</include>
                     <include>**/*.html</include>
@@ -61,8 +61,6 @@
                 </includes>
             </resource>
         </resources>
-
-
 
         <plugins>
             <plugin>
@@ -77,7 +75,6 @@
                 <configuration>
                     <source>1.10</source>
                     <target>1.10</target>
-
                     <outputDirectory>target/classes</outputDirectory>
                     <includes>
                         <include>**/*.java</include>
@@ -108,13 +105,15 @@
                 <configuration>
                     <identifier>${project.artifactId}</identifier>
                     <vendor>Laukvik</vendor>
-                    <mainClass>no.laukvik.csvview.App</mainClass>
+                    <mainClass>no.laukvik.csvview/no.laukvik.csvview.App</mainClass>
                     <!-- win.app | linux.app | mac.app | exe | msi | rpm | deb -->
-                    <bundler>msi</bundler>
+                    <bundler>exe</bundler>
                     <nativeReleaseVersion>${project.version}</nativeReleaseVersion>
                     <needShortcut>true</needShortcut>
                     <needMenu>true</needMenu>
                     <appName>${project.artifactId}</appName>
+                    <!-- Lager jfx/app/lib-->
+                    <libFolderName>./</libFolderName>
                     <manifestAttributes>
                         <Specification-Title>${project.name}</Specification-Title>
                         <Specification-Version>${project.version}</Specification-Version>
@@ -127,15 +126,14 @@
                     <bundleArguments>
                         <runtime/>
                         <icon>target/classes/feather.ico</icon>
-                        <module-path>target/classes</module-path>
-                        <module>no.laukvik.csvview</module>
+                        <module-path>.</module-path>
+                        <module>no.laukvik.csv, no.laukvik.csvview</module>
                         <installdirChooser>true</installdirChooser>
                     </bundleArguments>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
 
     <dependencies>
         <dependency>
@@ -149,12 +147,6 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.zenjava</groupId>
-            <artifactId>javafx-maven-plugin</artifactId>
-            <version>8.9.0-SNAPSHOT</version>
-        </dependency>
     </dependencies>
-
 
 </project>

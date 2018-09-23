@@ -1,0 +1,1 @@
+javapackager -deploy -native exe -outdir target/jfx/native -name CSV -m no.laukvik.csvview/no.laukvik.csvview.App --module-path ./target/jfx/app
