@@ -26,6 +26,11 @@ public class PivotSelectionController extends ScrollPane implements PivotListene
         setContent(flow);
     }
 
+    public void setSelection(PivotSelection selection){
+        flow.getChildren().clear();
+        selection.getFilters().forEach(f -> flow.getChildren().add(buildbutton(f)));
+    }
+
     public Button buildbutton(PivotFilter filter){
         Button b = new Button();
         b.setOnAction(new EventHandler<ActionEvent>() {

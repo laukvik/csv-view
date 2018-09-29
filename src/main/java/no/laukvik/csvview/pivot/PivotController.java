@@ -5,10 +5,10 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import no.laukvik.csv.CSV;
 import no.laukvik.csv.columns.*;
-import no.laukvik.csv.query.ValueMatcher;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PivotController extends TabPane implements PivotFilterListener {
 
@@ -125,6 +125,14 @@ public class PivotController extends TabPane implements PivotFilterListener {
 
     public PivotTableView getPivotTableView(int tabIndex){
         return (PivotTableView) getTabs().get(tabIndex).getContent();
+    }
+
+    public void removeSelectionForColumn(final Column column){
+        List<PivotFilter> filters = pivotSelection
+                .getFilters()
+                .stream()
+                .filter(filter -> filter.getColumn() == column).collect(Collectors.toList());
+        pivotSelection.getFilters().removeAll(filters);
     }
 
     public void clearSelections() {

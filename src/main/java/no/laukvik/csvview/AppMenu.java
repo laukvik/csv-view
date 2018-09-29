@@ -268,10 +268,7 @@ final class AppMenu extends MenuBar {
                 app.handleNewHeaders();
             }
         });
-        insert.getItems().addAll(newColumnItem, newRowItem, headersRowItem);
-
-        insert.getItems().forEach(menuItem -> menuItem.setDisable(true));
-
+        insert.getItems().addAll(newColumnItem, newRowItem);
         return insert;
     }
 

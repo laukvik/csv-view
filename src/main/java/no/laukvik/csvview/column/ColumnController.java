@@ -125,6 +125,10 @@ public class ColumnController extends TableView<ObservableColumn> {
         columnListeners.stream().forEach( l -> l.columnFocused(column));
     }
 
+    public void setSelectedIndex(int rowIndex){
+        getSelectionModel().select(rowIndex);
+    }
+
     public void setCSV(CSV csv) {
         this.csv = csv;
         getItems().clear();

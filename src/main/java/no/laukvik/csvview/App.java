@@ -334,7 +334,6 @@ public final class App extends Application implements ColumnListener, PivotListe
         } else if (owner == columnController) {
 
             int index = columnController.getSelectionModel().getSelectedIndex();
-            System.out.println("DeleteColumn: " + index);
             handleDeleteColumn(index);
         }
     }
@@ -365,8 +364,18 @@ public final class App extends Application implements ColumnListener, PivotListe
      * @param columnIndex the index of the column
      */
     private void deleteColumn(final int columnIndex) {
-        csv.removeColumn(columnIndex);
+        Column c = csv.getColumn(columnIndex);
+        csv.removeColumn(c);
+        pivotController.removeSelectionForColumn(c);
+        pivotSelectionController.setSelection(pivotController.getSelection());
         columnController.setCSV(csv);
+        if (columnIndex == csv.getColumnCount()){
+            columnController.setSelectedIndex(csv.getColumnCount() - 1);
+            pivotController.setColumn(csv.getColumn(csv.getColumnCount() - 1));
+        } else {
+            columnController.setSelectedIndex(columnIndex);
+            pivotController.setColumn(csv.getColumn(columnIndex));
+        }
         resultsTable.setCSV(csv);
     }
 
@@ -377,16 +386,12 @@ public final class App extends Application implements ColumnListener, PivotListe
         setSelectedColumnIndex(0);
     }
 
-
-
     /**
      * Updates the rows.
      */
     private void updateRows() {
         resultsTable.buildRows(csv);
     }
-
-
 
     /**
      * Handles printing action.
@@ -431,6 +436,8 @@ public final class App extends Application implements ColumnListener, PivotListe
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()) {
             csv.addColumn(new StringColumn(result.get()));
+            columnController.setCSV(csv);
+            resultsTable.setCSV(csv);
         }
     }
 
@@ -441,8 +448,12 @@ public final class App extends Application implements ColumnListener, PivotListe
         int rowIndex = resultsTable.getSelectionModel().getSelectedIndex();
         if (rowIndex == -1) {
             csv.addRow();
+            resultsTable.setCSV(csv);
+            resultsTable.getSelectionModel().select(0);
         } else {
             csv.addRow(rowIndex);
+            resultsTable.setCSV(csv);
+            resultsTable.getSelectionModel().select(rowIndex);
         }
     }
 
