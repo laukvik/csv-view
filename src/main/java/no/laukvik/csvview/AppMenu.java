@@ -103,6 +103,14 @@ final class AppMenu extends MenuBar {
             }
         });
 
+        MenuItem openWith = new MenuItem(getString("file.open.wizard"));
+        openWith.setAccelerator(getCtrl("i"));
+        openWith.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(final ActionEvent t) {
+                app.handleOpenFileWithOptions();
+            }
+        });
+
         // ------ RecentFiles files ------
         openRecentMenu = new Menu(getString("file.recent"));
 
@@ -120,17 +128,17 @@ final class AppMenu extends MenuBar {
         importItem.setAccelerator(getCtrl("i"));
         importItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                app.handleOpenFileWithOptions();
+                app.handleImport();
             }
         });
 
 
         final Menu exportMenu = new Menu(getString("file.export"));
 
+        MenuItem exportCsvItem = new MenuItem(getString("file.export.csv"));
         MenuItem exportJsonItem = new MenuItem(getString("file.export.json"));
         MenuItem exportXmlItem = new MenuItem(getString("file.export.xml"));
         MenuItem exportHtmlItem = new MenuItem(getString("file.export.html"));
-        MenuItem resourceBundleItem = new MenuItem(getString("file.export.resourcebundle"));
         exportJsonItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
                 app.handleExportJsonAction();
@@ -146,7 +154,7 @@ final class AppMenu extends MenuBar {
                 app.handleExportHtmlAction();
             }
         });
-        exportMenu.getItems().addAll(exportJsonItem, exportXmlItem, exportHtmlItem, resourceBundleItem);
+        exportMenu.getItems().addAll(exportCsvItem, exportJsonItem, exportXmlItem, exportHtmlItem);
 
         MenuItem printItem = new MenuItem(getString("file.print"));
         printItem.setAccelerator(getCtrl("p"));
@@ -155,11 +163,8 @@ final class AppMenu extends MenuBar {
                 app.handlePrintAction();
             }
         });
-        fileMenu.getItems().addAll(newItem, openItem, openRecentMenu, saveItem, saveAsItem, new SeparatorMenuItem(),
-                importItem, exportMenu, new SeparatorMenuItem(), printItem);
-
-        List.of(saveItem, saveAsItem, importItem, exportMenu, printItem).forEach(menuItem -> menuItem.setDisable(true));
-
+        fileMenu.getItems().addAll(newItem, openItem, openRecentMenu, openWith, saveItem, saveAsItem, new SeparatorMenuItem(),
+                importItem, exportMenu);
         return fileMenu;
     }
 

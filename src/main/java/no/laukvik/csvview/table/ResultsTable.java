@@ -63,6 +63,10 @@ public class ResultsTable extends TableView<ObservableRow> {
         rebuild();
     }
 
+    public Query getQuery() {
+        return query;
+    }
+
     public void setColumns(List<Column> selectedColumns) {
         this.visibleColumns = selectedColumns;
         this.rebuild();

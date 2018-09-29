@@ -9,14 +9,10 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import no.laukvik.csv.CSV;
-import no.laukvik.csv.Row;
 import no.laukvik.csv.columns.*;
 import no.laukvik.csv.io.CsvReaderException;
 import no.laukvik.csvview.chart.ChartBuilder;
@@ -170,11 +166,11 @@ public final class App extends Application implements ColumnListener, PivotListe
         final java.awt.Dimension percent = Builder.getPercentSize(0.8f, 0.7f);
         final Scene scene = new Scene(root, percent.getWidth(), percent.getHeight());
         stage.setScene(scene);
-
-        stage.show();
         recentFiles = new RecentFiles(RecentFiles.getConfigurationFile());
         menuBar.buildRecentList(recentFiles);
         handleNewFile();
+        showWelcomeScreen(true);
+        stage.show();
     }
 
     /**
@@ -225,8 +221,8 @@ public final class App extends Application implements ColumnListener, PivotListe
      * Clears all existing data in the model.
      */
     public void handleNewFile() {
+        showWelcomeScreen(false);
         csv = new CSV();
-        showWelcomeScreen(true);
         columnController.setItems(observableArrayList());
         pivotController.setColumn(null);
         resultsTable.clearAll();
@@ -297,7 +293,11 @@ public final class App extends Application implements ColumnListener, PivotListe
         summaryBar.setFileSize(csv.getFile() == null ? 0 : csv.getFile().length());
         summaryBar.setSeparator(csv.getSeparatorChar());
         summaryBar.setFileType(formatFiletype(csv.getFile()));
-        stage.setTitle(formatFilename(csv.getFile()));
+        if (csv.getFile() == null) {
+            stage.setTitle(bundle.getString("app.file.untitled") + " - " + bundle.getString("app.title"));
+        } else {
+            stage.setTitle(formatFilename(csv.getFile()) + " - " + bundle.getString("app.title"));
+        }
     }
 
     /**
@@ -544,6 +544,36 @@ public final class App extends Application implements ColumnListener, PivotListe
         Collections.swap(columnController.getItems(), fromIndex, toIndex);
     }
 
+    public void handleImport() {
+        final FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(bundle.getString("dialog.file.import"));
+        fileChooser.getExtensionFilters().addAll(FileChooserExtensions.buildCSV());
+        final File selectedFile = fileChooser.showOpenDialog(stage);
+        if (selectedFile != null) {
+            try {
+                csv.importFile(selectedFile);
+                resultsTable.setCSV(csv);
+            } catch (Exception e) {
+                e.printStackTrace();
+                alert(bundle.getString("file.import.csv.failed"));
+            }
+        }
+    }
+
+    public void handleExportCsvAction() {
+        final FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(bundle.getString("dialog.file.export.csv"));
+        fileChooser.getExtensionFilters().addAll(FileChooserExtensions.buildCSV());
+        final File selectedFile = fileChooser.showSaveDialog(stage);
+        if (selectedFile != null) {
+            try {
+                csv.writeFile(selectedFile, resultsTable.getQuery());
+            } catch (Exception e) {
+                alert(bundle.getString("file.export.csv.failed"));
+            }
+        }
+    }
+
     /**
      * Handles export to JSON action.
      */
@@ -554,7 +584,7 @@ public final class App extends Application implements ColumnListener, PivotListe
         final File selectedFile = fileChooser.showSaveDialog(stage);
         if (selectedFile != null) {
             try {
-                csv.writeJSON(selectedFile);
+                csv.writeJSON(selectedFile, resultsTable.getQuery());
             } catch (Exception e) {
                 alert(bundle.getString("file.export.json.failed"));
             }
