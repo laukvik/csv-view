@@ -218,8 +218,6 @@ final class AppMenu extends MenuBar {
         });
         edit.getItems().addAll(cutItem, copyItem, pasteItem, deleteItem,
                 new SeparatorMenuItem(), moveUpItem, moveDownItem);
-
-        edit.getItems().forEach(menuItem -> menuItem.setDisable(true));
         return edit;
     }
 

@@ -92,35 +92,12 @@ final public class Builder {
     }
 
     /**
-     * Copies the selected row to Clipboard.
-     * <p>
-     *
-     * @param rowIndex the row index
-     * @param csv      the csv
-     * @return the string representation of the row
-     */
-    public static String toClipboardString(final int rowIndex, final CSV csv) {
-        StringBuilder b = new StringBuilder();
-        for (int x = 0; x < csv.getColumnCount(); x++) {
-            if (x > 0) {
-                b.append(CSV.TAB);
-            }
-//            StringColumn sc = (StringColumn) csv.getColumn(x);
-            Column sc = csv.getColumn(x);
-
-            b.append(csv.getRow(rowIndex).getRaw(sc));
-        }
-        return b.toString();
-    }
-
-    /**
      * Returns the Library folder for the user.
      *
      * @return the folder called Library in the users home folder
      */
     public static File getLibrary() {
         if (isWindows()){
-//            return "C:\\Users\\Morten\\AppData\\Local\\Ableton"
             return new File(System.getProperty("user.home") + "\\AppData\\Local\\");
         }
         return new File(System.getProperty("user.home"), "Library");

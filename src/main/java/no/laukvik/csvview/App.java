@@ -44,7 +44,6 @@ import java.util.ResourceBundle;
 
 import static javafx.collections.FXCollections.observableArrayList;
 import static no.laukvik.csvview.utils.Builder.getIcon;
-import static no.laukvik.csvview.utils.Builder.toClipboardString;
 import static no.laukvik.csvview.utils.Formatter.*;
 
 /**
@@ -459,46 +458,21 @@ public final class App extends Application implements ColumnListener, PivotListe
      * Handles copy action.
      */
     public final void handleCopyAction() {
-        int rowIndex = resultsTable.getSelectionModel().getSelectedIndex();
-        if (rowIndex > -1) {
-            final Clipboard clipboard = Clipboard.getSystemClipboard();
-            final ClipboardContent content = new ClipboardContent();
-            content.putString(toClipboardString(rowIndex, csv));
-            clipboard.setContent(content);
-        }
+        resultsTable.copyToClipboard();
     }
 
     /**
      * Handles paste action.
      */
     public final void handlePasteAction() {
-        int rowIndex = resultsTable.getSelectionModel().getSelectedIndex();
-        if (rowIndex > -1) {
-            final Clipboard clipboard = Clipboard.getSystemClipboard();
-            String pasted = (String) clipboard.getContent(DataFormat.PLAIN_TEXT);
-            String[] values = pasted.split(CSV.TAB + "");
-            Row r = csv.addRow(rowIndex);
-            for (int x = 0; x < values.length; x++) {
-                String value = values[x];
-                Column c = csv.getColumn(x);
-                r.setRaw(c, value);
-            }
-            updateRows();
-            resultsTable.getSelectionModel().select(rowIndex);
-        }
+        resultsTable.pasteFromClipboard();
     }
 
     /**
      * Handles cut action.
      */
     public final void handleCutAction() {
-        int rowIndex = resultsTable.getSelectionModel().getSelectedIndex();
-        if (rowIndex > -1) {
-            handleCopyAction();
-            csv.removeRow(rowIndex);
-            resultsTable.getItems().remove(rowIndex);
-            resultsTable.getSelectionModel().select(rowIndex);
-        }
+        resultsTable.cutToClipboard();
     }
 
     /**

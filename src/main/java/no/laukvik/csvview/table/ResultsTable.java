@@ -9,13 +9,16 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
 import no.laukvik.csv.CSV;
+import no.laukvik.csv.Row;
 import no.laukvik.csv.columns.Column;
 import no.laukvik.csv.query.Query;
+import no.laukvik.csvview.ClipboardHelper;
 import no.laukvik.csvview.utils.Builder;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 /**
  * A JavaFX component showing all columns in a CSV.
@@ -28,7 +31,6 @@ public class ResultsTable extends TableView<ObservableRow> {
      * The default width of columns in the result sets.
      */
     private static final int COLUMN_WIDTH_DEFAULT = 100;
-    private List<DataTableListener> listeners;
     private List<Column> visibleColumns;
     private Query query;
     private CSV csv;
@@ -40,7 +42,6 @@ public class ResultsTable extends TableView<ObservableRow> {
         super();
         this.query = null;
         this.csv = null;
-        listeners = new ArrayList<>();
         visibleColumns = new ArrayList<>();
         ResourceBundle bundle = Builder.getBundle();
         setEditable(true);
@@ -134,12 +135,30 @@ public class ResultsTable extends TableView<ObservableRow> {
         return tc;
     }
 
-    public void addDataTableListener(DataTableListener listener) {
-        listeners.add(listener);
+    private List<Row> getSelectedRows(){
+        return getSelectionModel().getSelectedItems().stream().map(observableRow -> observableRow.getRow()).collect(Collectors.toList());
     }
 
-    public void removeDataTableListener(DataTableListener listener) {
-        listeners.remove(listener);
+    public void copyToClipboard(){
+        List<Row> rows = getSelectedRows();
+        if (!rows.isEmpty()) {
+            ClipboardHelper.copyRowsToClipboard(rows, csv);
+        }
     }
 
+    public void pasteFromClipboard(){
+        int rowIndex = getSelectionModel().getSelectedIndex();
+        if (rowIndex > -1) {
+            ClipboardHelper.pasteClipboard(rowIndex, csv);
+            rebuild();
+            getSelectionModel().select(rowIndex);
+        }
+    }
+
+    public void cutToClipboard() {
+        List<Row> rows = getSelectedRows();
+        ClipboardHelper.copyRowsToClipboard(rows, csv);
+        csv.findRows().removeAll(rows);
+        rebuild();
+    }
 }
