@@ -21,6 +21,10 @@ public final class FileChooserExtensions {
     private FileChooserExtensions() {
     }
 
+    public static FileChooser.ExtensionFilter buildCompatible() {
+        return new FileChooser.ExtensionFilter("All formats", "*.csv", "*.tsv");
+    }
+
     /**
      * Extension for CSV files.
      *
