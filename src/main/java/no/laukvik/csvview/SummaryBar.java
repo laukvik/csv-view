@@ -3,14 +3,17 @@ package no.laukvik.csvview;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ToolBar;
+import no.laukvik.csv.Row;
+import no.laukvik.csvview.table.ResultsTableListener;
 
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static no.laukvik.csvview.utils.Formatter.formatSeparator;
 import static no.laukvik.csvview.utils.Formatter.toKb;
 
-class SummaryBar extends ToolBar {
+class SummaryBar extends ToolBar implements ResultsTableListener {
 
     private final ResourceBundle bundle;
     /**
@@ -37,6 +40,8 @@ class SummaryBar extends ToolBar {
      * The Label for showing the file type.
      */
     private Label fileTypeLabel;
+
+    private Label selectionLabel;
     /**
      * The Label for showing the progress bar.
      */
@@ -66,12 +71,18 @@ class SummaryBar extends ToolBar {
         separatorLabel = new Label("-");
         Label filetype = new Label(bundle.getString("summarybar.filetype"));
         filetype.setDisable(true);
+
+        separatorLabel = new Label("-");
+        selectionLabel = new Label();
+        Label selection = new Label(bundle.getString("summarybar.selected.rows"));
+        selection.setDisable(true);
+
         fileTypeLabel = new Label("");
         progressBar = new ProgressBar();
         progressBar.setVisible(false);
         progressBar.setPrefWidth(PROGRESS_BAR_WIDTH);
         getItems().addAll(rows, rowsLabel, cols, colsLabel, size, sizeLabel, encoding, encodingLabel,
-                separator, separatorLabel, filetype, fileTypeLabel, progressBar);
+                separator, separatorLabel, filetype, fileTypeLabel, selection, selectionLabel, progressBar);
     }
 
     public void setRowCount(int rows){
@@ -104,5 +115,10 @@ class SummaryBar extends ToolBar {
 
     public void setProgressBar(boolean isVisible){
         progressBar.setVisible(isVisible);
+    }
+
+    @Override
+    public void rowsSelected(List<Row> rows) {
+        selectionLabel.setText(Integer.toString(rows.size()));
     }
 }

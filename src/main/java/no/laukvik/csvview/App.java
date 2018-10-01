@@ -138,6 +138,8 @@ public final class App extends Application implements ColumnListener, PivotListe
         columnsScroll.setFitToHeight(true);
         columnsScroll.setFitToWidth(true);
 
+
+
         pivotSelectionController = new PivotSelectionController();
 
         pivotController = new PivotController();
@@ -160,6 +162,7 @@ public final class App extends Application implements ColumnListener, PivotListe
 
         topContainer.getChildren().add(menuBar);
         summaryBar = new SummaryBar(bundle);
+        resultsTable.addResultsTableListener(summaryBar);
         root = new BorderPane();
         root.setTop(topContainer);
         root.setCenter(mainSplit);

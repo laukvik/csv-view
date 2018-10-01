@@ -74,7 +74,8 @@ public class ResultsTable extends TableView<ObservableRow> {
 
     private void fireSelectedRows(boolean hasFocus){
         List<Row> rows = getSelectedRows();
-        this.listeners.forEach(listener -> listener.rowsSelected(hasFocus ? rows : List.of()));
+
+        this.listeners.forEach(listener -> listener.rowsSelected(hasFocus ? rows : new ArrayList<>()));
     }
 
     public void setCSV(CSV csv) {
