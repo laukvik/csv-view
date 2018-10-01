@@ -93,7 +93,7 @@ public final class PivotTableView extends TableView<PivotFilter> {
         getSelectionModel().selectedItemProperty().addListener(new ChangeListener<PivotFilter>() {
             @Override
             public void changed(ObservableValue<? extends PivotFilter> observable, PivotFilter oldValue, PivotFilter newValue) {
-                listener.pivotFilterFocused(newValue);
+                listener.pivotFilterSelected(newValue);
             }
         });
     }

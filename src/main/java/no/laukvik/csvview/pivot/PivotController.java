@@ -41,7 +41,7 @@ public class PivotController extends TabPane implements PivotFilterListener {
     }
 
     @Override
-    public void pivotFilterFocused(PivotFilter filter) {
+    public void pivotFilterSelected(PivotFilter filter) {
         firePivotFocused(filter);
     }
 

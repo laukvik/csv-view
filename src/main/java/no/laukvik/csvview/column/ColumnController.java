@@ -1,5 +1,7 @@
 package no.laukvik.csvview.column;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -97,6 +99,15 @@ public class ColumnController extends TableView<ObservableColumn> {
         setPlaceholder(new Label(bundle.getString("columncontroller.empty")));
         checkboxColumn.prefWidthProperty().bind(widthProperty().multiply(CHECKBOX_RATIO));
         columnNameColumn.prefWidthProperty().bind(widthProperty().multiply(COLUMN_RATIO));
+
+        focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (!newValue) {
+                    fireFocusChanged(null);
+                }
+            }
+        });
     }
 
     public List<Column> getSelectedColumns(){
@@ -122,7 +133,7 @@ public class ColumnController extends TableView<ObservableColumn> {
     }
 
     private void fireFocusChanged(Column column){
-        columnListeners.stream().forEach( l -> l.columnFocused(column));
+        columnListeners.stream().forEach( l -> l.columnSelected(column));
     }
 
     public void setSelectedIndex(int rowIndex){

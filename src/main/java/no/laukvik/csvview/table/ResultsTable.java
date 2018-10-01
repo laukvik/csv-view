@@ -1,5 +1,6 @@
 package no.laukvik.csvview.table;
 
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.scene.control.Label;
@@ -34,6 +35,7 @@ public class ResultsTable extends TableView<ObservableRow> {
     private List<Column> visibleColumns;
     private Query query;
     private CSV csv;
+    private List<ResultsTableListener> listeners;
 
     /**
      * Creates a new empty instance.
@@ -43,12 +45,36 @@ public class ResultsTable extends TableView<ObservableRow> {
         this.query = null;
         this.csv = null;
         visibleColumns = new ArrayList<>();
+        listeners = new ArrayList<>();
         ResourceBundle bundle = Builder.getBundle();
         setEditable(true);
         Label l = new Label(bundle.getString("resultstable.empty"));
         setPlaceholder(l);
         getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         clearAll();
+        getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                fireSelectedRows(true);
+            }
+        });
+        focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (!newValue){
+                    fireSelectedRows(newValue);
+                }
+            }
+        });
+    }
+
+    public void addResultsTableListener(ResultsTableListener listener){
+        this.listeners.add(listener);
+    }
+
+    private void fireSelectedRows(boolean hasFocus){
+        List<Row> rows = getSelectedRows();
+        this.listeners.forEach(listener -> listener.rowsSelected(hasFocus ? rows : List.of()));
     }
 
     public void setCSV(CSV csv) {

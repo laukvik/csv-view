@@ -16,7 +16,7 @@ public class FileOpenDialog {
         fileChooser = new FileChooser();
         fileChooser.setTitle(bundle.getString("fileopendialog"));
         fileChooser.getExtensionFilters().clear();
-        fileChooser.getExtensionFilters().addAll(FileChooserExtensions.buildCSV());
+        fileChooser.getExtensionFilters().addAll(FileChooserExtensions.buildCSV(), FileChooserExtensions.buildTSV());
     }
 
     public File getFile(Stage stage) {

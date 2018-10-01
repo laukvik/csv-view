@@ -12,13 +12,22 @@ public final class FileChooserExtensions {
      * All supported FileChooser Extensions.
      */
     public static final FileChooser.ExtensionFilter[] SUPPORTED_EXTENSIONS = {
-            buildCSV(), buildResourceBundle(), buildTextFile(), buildJsonFile(), buildHtmlFile(), buildXmlFile()
+            buildCSV(), buildTSV(), buildResourceBundle(), buildTextFile(), buildJsonFile(), buildHtmlFile(), buildXmlFile()
     };
 
     /**
      * Hide constructor in this builder class.
      */
     private FileChooserExtensions() {
+    }
+
+    /**
+     * Extension for CSV files.
+     *
+     * @return filter
+     */
+    public static FileChooser.ExtensionFilter buildTSV() {
+        return new FileChooser.ExtensionFilter("Tab separated files", "*.tsv");
     }
 
     /**

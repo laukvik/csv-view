@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import no.laukvik.csv.CSV;
 import no.laukvik.csv.columns.*;
 import no.laukvik.csv.io.CsvReaderException;
+import no.laukvik.csv.io.IncorrectColumnsException;
 import no.laukvik.csvview.chart.ChartBuilder;
 import no.laukvik.csvview.column.ColumnController;
 import no.laukvik.csvview.column.ColumnListener;
@@ -132,6 +133,7 @@ public final class App extends Application implements ColumnListener, PivotListe
         stage.setTitle(bundle.getString("app.title"));
         columnController = new ColumnController();
         resultsTable = new ResultsTable();
+        menuBar = new AppMenu(this);
         final ScrollPane columnsScroll = new ScrollPane(columnController);
         columnsScroll.setFitToHeight(true);
         columnsScroll.setFitToWidth(true);
@@ -155,7 +157,7 @@ public final class App extends Application implements ColumnListener, PivotListe
         SplitPane.setResizableWithParent(tableSplit, Boolean.FALSE);
 
         final VBox topContainer = new VBox();
-        menuBar = new AppMenu(this);
+
         topContainer.getChildren().add(menuBar);
         summaryBar = new SummaryBar(bundle);
         root = new BorderPane();
@@ -168,6 +170,10 @@ public final class App extends Application implements ColumnListener, PivotListe
         stage.setScene(scene);
         recentFiles = new RecentFiles(RecentFiles.getConfigurationFile());
         menuBar.buildRecentList(recentFiles);
+
+        resultsTable.addResultsTableListener(menuBar);
+        columnController.addColumnListener(menuBar);
+
         handleNewFile();
         showWelcomeScreen(true);
         stage.show();
@@ -279,7 +285,12 @@ public final class App extends Application implements ColumnListener, PivotListe
             showWelcomeScreen(false);
             updateAll();
         } catch (CsvReaderException e) {
-            alert(e.getMessage());
+            if (e.getCause() instanceof IncorrectColumnsException){
+                IncorrectColumnsException ice = (IncorrectColumnsException) e.getCause();
+                error(bundle.getString("load.file.load.formaterror"), MessageFormat.format(bundle.getString("load.file.load.incorrect.columns"), ice.getRequired(), ice.getFound(), ice.getRowIndex() ), file);
+            } else {
+                error(bundle.getString("load.file.load.failed"), e.getCause().getMessage(), file);
+            }
         }
     }
 
@@ -300,6 +311,12 @@ public final class App extends Application implements ColumnListener, PivotListe
         }
     }
 
+    private void updateMenubar(){
+//        menuBar.setImportEnabled(csv.getColumnCount() > 0);
+//        menuBar.setExportEnabled(csv.getColumnCount() > 0);
+//        menuBar.setInsertRowEnabled(csv.getColumnCount() > 0);
+    }
+
     /**
      * Shows a dialog box with the error message.
      *
@@ -313,29 +330,39 @@ public final class App extends Application implements ColumnListener, PivotListe
     }
 
     /**
+     * Shows a dialog box with the error message.
+     *
+     */
+    private void error(String title, String message, final File file) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(bundle.getString("app.title"));
+        alert.setHeaderText(title);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    public final void handleDeleteRowsAction(){
+        ObservableList<ObservableRow> items = resultsTable.getSelectionModel().getSelectedItems();
+        int index = resultsTable.getSelectionModel().getFocusedIndex();
+        for (ObservableRow or : items){
+            int rowIndex = csv.indexOf(or.getRow());
+            csv.removeRow(rowIndex);
+        }
+        resultsTable.setCSV(csv);
+        if (items.size() == 1){
+            resultsTable.getSelectionModel().clearAndSelect(index);
+            resultsTable.getSelectionModel().focus(index);
+        } else {
+            resultsTable.getSelectionModel().clearSelection();
+        }
+    }
+
+    /**
      * Handles the delete action.
      */
-    public final void handleDeleteAction() {
-        Node owner = stage.getScene().getFocusOwner();
-        if (owner == resultsTable) {
-            ObservableList<ObservableRow> items = resultsTable.getSelectionModel().getSelectedItems();
-            int index = resultsTable.getSelectionModel().getFocusedIndex();
-            for (ObservableRow or : items){
-                int rowIndex = csv.indexOf(or.getRow());
-                csv.removeRow(rowIndex);
-            }
-            resultsTable.setCSV(csv);
-            if (items.size() == 1){
-                resultsTable.getSelectionModel().clearAndSelect(index);
-                resultsTable.getSelectionModel().focus(index);
-            } else {
-                resultsTable.getSelectionModel().clearSelection();
-            }
-        } else if (owner == columnController) {
-
-            int index = columnController.getSelectionModel().getSelectedIndex();
-            handleDeleteColumn(index);
-        }
+    public final void handleDeleteColumnAction() {
+        int index = columnController.getSelectionModel().getSelectedIndex();
+        handleDeleteColumn(index);
     }
 
     /**
@@ -458,31 +485,23 @@ public final class App extends Application implements ColumnListener, PivotListe
     }
 
     /**
-     * Handles insert new headers action.
-     */
-    public final void handleNewHeaders() {
-        csv.insertColumns();
-        updateRows();
-    }
-
-    /**
      * Handles copy action.
      */
-    public final void handleCopyAction() {
+    public final void handleCopyRowsAction() {
         resultsTable.copyToClipboard();
     }
 
     /**
      * Handles paste action.
      */
-    public final void handlePasteAction() {
+    public final void handlePasteRowsAction() {
         resultsTable.pasteFromClipboard();
     }
 
     /**
      * Handles cut action.
      */
-    public final void handleCutAction() {
+    public final void handleCutRowsAction() {
         resultsTable.cutToClipboard();
     }
 
@@ -722,19 +741,15 @@ public final class App extends Application implements ColumnListener, PivotListe
 
     /* -------------------------------------- Column Controller events */
 
-    @Override
-    public void columnFocused(Column column) {
-        setSelectedColumnIndex(csv.indexOf(column));
-    }
 
     @Override
     public void columnChanged(Column column) {
-
+//        setSelectedColumnIndex(csv.indexOf(column));
     }
 
     @Override
-    public void columnSelectionChanged(List<Column> columns) {
-
+    public void columnSelected(Column column) {
+        setSelectedColumnIndex(csv.indexOf(column));
     }
 
     @Override
@@ -742,7 +757,6 @@ public final class App extends Application implements ColumnListener, PivotListe
         resultsTable.setColumns(columnController.getSelectedColumns());
         resultsTable.setCSV(csv);
     }
-
 
     /* -------------------------------------- Pivot Controller events */
 

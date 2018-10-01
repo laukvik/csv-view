@@ -2,18 +2,18 @@ package no.laukvik.csvview;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.input.KeyCode;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCombination;
+import no.laukvik.csv.Row;
+import no.laukvik.csv.columns.Column;
+import no.laukvik.csvview.column.ColumnListener;
 import no.laukvik.csvview.content.ViewMode;
+import no.laukvik.csvview.table.ResultsTableListener;
 import no.laukvik.csvview.utils.Builder;
 import no.laukvik.csvview.utils.RecentFiles;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -22,7 +22,7 @@ import static no.laukvik.csvview.utils.Builder.isMac;
 /**
  * JavaFX MenuBar for the CSV application.
  */
-final class AppMenu extends MenuBar {
+final class AppMenu extends MenuBar implements ResultsTableListener, ColumnListener {
 
     /**
      * The Menu for View.
@@ -40,6 +40,9 @@ final class AppMenu extends MenuBar {
      * The Menu for recent files.
      */
     private Menu openRecentMenu;
+    private MenuItem importItem;
+    private Menu exportMenu;
+    private Menu editMenu;
 
     /**
      * Creates a new MenuBar for the JavaFX application.
@@ -52,9 +55,8 @@ final class AppMenu extends MenuBar {
         bundle = Builder.getBundle();
         setUseSystemMenuBar(isMac());
         viewMenu = buildViewMenu();
-        //
         getMenus().add(buildFileMenu());
-        getMenus().add(buildEditMenu());
+        getMenus().add(buildEditRowsMenu());
         getMenus().add(buildQueryMenu());
         getMenus().add(buildInsertMenu());
         getMenus().addAll(viewMenu);
@@ -104,7 +106,6 @@ final class AppMenu extends MenuBar {
         });
 
         MenuItem openWith = new MenuItem(getString("file.open.wizard"));
-        openWith.setAccelerator(getCtrl("i"));
         openWith.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
                 app.handleOpenFileWithOptions();
@@ -124,8 +125,7 @@ final class AppMenu extends MenuBar {
             }
         });
 
-        MenuItem importItem = new MenuItem(getString("file.import"));
-        importItem.setAccelerator(getCtrl("i"));
+        importItem = new MenuItem(getString("file.import"));
         importItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
                 app.handleImport();
@@ -133,7 +133,7 @@ final class AppMenu extends MenuBar {
         });
 
 
-        final Menu exportMenu = new Menu(getString("file.export"));
+        exportMenu = new Menu(getString("file.export"));
 
         MenuItem exportCsvItem = new MenuItem(getString("file.export.csv"));
         MenuItem exportJsonItem = new MenuItem(getString("file.export.json"));
@@ -169,61 +169,57 @@ final class AppMenu extends MenuBar {
     }
 
     /**
-     * Builds the edit menu.
+     * Builds the editMenu menu.
      *
      * @return the menu
      */
-    private Menu buildEditMenu() {
+    private Menu buildEditRowsMenu() {
 
         // ----- Edit ------
-        final Menu edit = new Menu(getString("edit"));
-        MenuItem cutItem = new MenuItem(getString("edit.cut"));
+        editMenu = new Menu(getString("edit"));
+        MenuItem cutItem = new MenuItem(getString("edit.cut.rows"));
         cutItem.setAccelerator(getCtrl("x"));
         cutItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                app.handleCutAction();
+                app.handleCutRowsAction();
             }
         });
 
-        MenuItem copyItem = new MenuItem(getString("edit.copy"));
+        MenuItem copyItem = new MenuItem(getString("edit.copy.rows"));
         copyItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                app.handleCopyAction();
+                app.handleCopyRowsAction();
             }
         });
         copyItem.setAccelerator(getCtrl("c"));
-        MenuItem pasteItem = new MenuItem(getString("edit.paste"));
+        MenuItem pasteItem = new MenuItem(getString("edit.paste.rows"));
         pasteItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                app.handlePasteAction();
+                app.handlePasteRowsAction();
             }
         });
         pasteItem.setAccelerator(getCtrl("v"));
-        MenuItem deleteItem = new MenuItem(getString("edit.delete"));
+        MenuItem deleteItem = new MenuItem(getString("edit.delete.rows"));
         deleteItem.setAccelerator(KeyCombination.keyCombination("delete"));
         deleteItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                app.handleDeleteAction();
+                app.handleDeleteRowsAction();
             }
         });
 
-        MenuItem moveUpItem = new MenuItem(getString("edit.moveup"));
-        moveUpItem.setAccelerator(getCtrl("" + KeyCode.UP));
-        moveUpItem.setOnAction(new EventHandler<ActionEvent>() {
+        MenuItem deleteColumnItem = new MenuItem(getString("edit.delete.column"));
+        deleteColumnItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
-                app.handleMoveUpAction();
+                app.handleDeleteColumnAction();
             }
         });
-        MenuItem moveDownItem = new MenuItem(getString("edit.movedown"));
-        moveDownItem.setAccelerator(getCtrl("" + KeyCode.DOWN));
-        moveDownItem.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(final ActionEvent t) {
-                app.handleMoveDownAction();
-            }
-        });
-        edit.getItems().addAll(cutItem, copyItem, pasteItem, deleteItem,
-                new SeparatorMenuItem(), moveUpItem, moveDownItem);
-        return edit;
+
+        editMenu.getItems().addAll(
+                cutItem, copyItem, pasteItem, deleteItem,
+                new SeparatorMenuItem(),
+                deleteColumnItem
+        );
+        return editMenu;
     }
 
     /**
@@ -253,24 +249,15 @@ final class AppMenu extends MenuBar {
         // ----- Insert ------
         final Menu insert = new Menu(getString("insert"));
         MenuItem newColumnItem = new MenuItem(getString("insert.column"));
-        newColumnItem.setAccelerator(getCtrl("i"));
         newColumnItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
                 app.handleNewColumnAction();
             }
         });
         MenuItem newRowItem = new MenuItem(getString("insert.row"));
-        newRowItem.setAccelerator(getCtrl("R"));
         newRowItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
                 app.handleNewRowAction();
-            }
-        });
-        MenuItem headersRowItem = new MenuItem(getString("insert.headers"));
-        headersRowItem.setAccelerator(getCtrl("H"));
-        headersRowItem.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(final ActionEvent t) {
-                app.handleNewHeaders();
             }
         });
         insert.getItems().addAll(newColumnItem, newRowItem);
@@ -395,4 +382,25 @@ final class AppMenu extends MenuBar {
     public void setDefault() {
         setSelectedMode(ViewMode.Results);
     }
+
+    public void rowsSelected(List<Row> rows){
+        boolean disable = rows.isEmpty();
+        editMenu.getItems().get(0).setDisable(disable);
+        editMenu.getItems().get(1).setDisable(disable);
+        editMenu.getItems().get(2).setDisable(disable);
+        editMenu.getItems().get(3).setDisable(disable);
+    }
+
+    public void columnSelected(Column column){
+        editMenu.getItems().get(5).setDisable(column == null);
+    }
+
+    @Override
+    public void columnChanged(Column column) {
+    }
+
+    @Override
+    public void columnVisibilityChanged(Column column, boolean isVisible) {
+    }
+
 }

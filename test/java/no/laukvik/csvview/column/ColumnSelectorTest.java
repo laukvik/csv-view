@@ -32,18 +32,13 @@ public class ColumnSelectorTest extends Application implements ColumnListener {
     }
 
     @Override
-    public void columnFocused(Column column) {
-        System.out.println("columnFocused: " + column);
+    public void columnSelected(Column column) {
+        System.out.println("columnSelected: " + column);
     }
 
     @Override
     public void columnChanged(Column column) {
 
-    }
-
-    @Override
-    public void columnSelectionChanged(List<Column> columns) {
-        System.out.println("columnSelectionChanged: " + columns);
     }
 
     @Override
