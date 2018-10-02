@@ -399,13 +399,17 @@ public final class App extends Application implements ColumnListener, PivotListe
         pivotController.removeSelectionForColumn(c);
         pivotSelectionController.setSelection(pivotController.getSelection());
         columnController.setCSV(csv);
+        Column column;
+        int index;
         if (columnIndex == csv.getColumnCount()){
-            columnController.setSelectedIndex(csv.getColumnCount() - 1);
-            pivotController.setColumn(csv.getColumn(csv.getColumnCount() - 1));
+            index = csv.getColumnCount() - 1;
+            column = csv.getColumn(csv.getColumnCount() - 1);
         } else {
-            columnController.setSelectedIndex(columnIndex);
-            pivotController.setColumn(csv.getColumn(columnIndex));
+            index = columnIndex;
+            column = csv.getColumn(columnIndex);
         }
+        columnController.setSelectedIndex(index);
+        pivotController.setColumn(column);
         resultsTable.setCSV(csv);
     }
 
