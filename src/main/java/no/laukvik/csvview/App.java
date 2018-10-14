@@ -188,7 +188,7 @@ public final class App extends Application implements ColumnListener, PivotListe
      * @param selectedColumnIndex the selectedColumnIndex
      */
     private void setSelectedColumnIndex(final int selectedColumnIndex) {
-        if (selectedColumnIndex > -1) {
+        if (selectedColumnIndex > -1 && csv.getColumns().size() > 0) {
             pivotController.setColumn(csv.getColumn(selectedColumnIndex));
         }
     }

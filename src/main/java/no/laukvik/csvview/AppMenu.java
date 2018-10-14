@@ -139,6 +139,12 @@ final class AppMenu extends MenuBar implements ResultsTableListener, ColumnListe
         MenuItem exportJsonItem = new MenuItem(getString("file.export.json"));
         MenuItem exportXmlItem = new MenuItem(getString("file.export.xml"));
         MenuItem exportHtmlItem = new MenuItem(getString("file.export.html"));
+
+        exportCsvItem.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(final ActionEvent t) {
+                app.handleExportCsvAction();
+            }
+        });
         exportJsonItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent t) {
                 app.handleExportJsonAction();

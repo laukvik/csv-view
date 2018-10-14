@@ -74,7 +74,6 @@ public class ResultsTable extends TableView<ObservableRow> {
 
     private void fireSelectedRows(boolean hasFocus){
         List<Row> rows = getSelectedRows();
-
         this.listeners.forEach(listener -> listener.rowsSelected(hasFocus ? rows : new ArrayList<>()));
     }
 
@@ -91,6 +90,7 @@ public class ResultsTable extends TableView<ObservableRow> {
     }
 
     public Query getQuery() {
+        query.setColumns(this.visibleColumns);
         return query;
     }
 
@@ -122,7 +122,7 @@ public class ResultsTable extends TableView<ObservableRow> {
         if (csv == null) {
             return;
         }
-        if (emptyColumns()) {
+        if (visibleColumns == null) {
             csv.getColumns()
                     .stream()
                     .forEach(column -> getColumns().add(buildColumn(column, csv.indexOf(column))));
@@ -131,10 +131,6 @@ public class ResultsTable extends TableView<ObservableRow> {
                     .stream()
                     .forEach(column -> getColumns().add(buildColumn(column, csv.indexOf(column))));
         }
-    }
-
-    private boolean emptyColumns(){
-        return visibleColumns == null || visibleColumns.isEmpty();
     }
 
     public void buildRows(CSV csv) {
