@@ -90,7 +90,7 @@ public class ResultsTable extends TableView<ObservableRow> {
     }
 
     public Query getQuery() {
-        query.setColumns(this.visibleColumns);
+//        query.setColumns(this.visibleColumns);
         return query;
     }
 

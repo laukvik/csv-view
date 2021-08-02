@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 import no.laukvik.csv.CSV;
 import no.laukvik.csv.columns.*;
 import no.laukvik.csv.io.CsvReaderException;
-import no.laukvik.csv.io.IncorrectColumnsException;
 import no.laukvik.csvview.chart.ChartBuilder;
 import no.laukvik.csvview.column.ColumnController;
 import no.laukvik.csvview.column.ColumnListener;
@@ -35,11 +34,9 @@ import java.io.File;
 import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static javafx.collections.FXCollections.observableArrayList;
 import static no.laukvik.csvview.utils.Builder.getIcon;
 import static no.laukvik.csvview.utils.Formatter.*;
 
@@ -127,7 +124,7 @@ public final class App extends Application implements ColumnListener, PivotListe
      *
      * @param primaryStage the stage
      */
-    public final void start(final Stage primaryStage) {
+    public void start(final Stage primaryStage) {
         this.stage = primaryStage;
         stage.getIcons().add(getIcon());
         stage.setTitle(bundle.getString("app.title"));
@@ -196,7 +193,7 @@ public final class App extends Application implements ColumnListener, PivotListe
     /**
      * Handles opening files.
      */
-    public final void handleFileOpen() {
+    public void handleFileOpen() {
         final FileOpenDialog dialog = new FileOpenDialog(bundle);
         final File selectedFile = dialog.getFile(this.stage);
         if (selectedFile != null) {
@@ -209,7 +206,7 @@ public final class App extends Application implements ColumnListener, PivotListe
      *
      * @param file the file to open
      */
-    public final void loadFile(final File file) {
+    public void loadFile(final File file) {
         if (file != null) {
             loadFile(file, null, null);
         }
@@ -218,7 +215,7 @@ public final class App extends Application implements ColumnListener, PivotListe
     /**
      * Handles opening file with options.
      */
-    public final void handleOpenFileWithOptions() {
+    public void handleOpenFileWithOptions() {
         FileOpenAdvancedDialog dialog = new FileOpenAdvancedDialog(bundle);
         File file = dialog.getSelectedFile(this.stage);
         if (file != null) {
@@ -232,7 +229,7 @@ public final class App extends Application implements ColumnListener, PivotListe
     public void handleNewFile() {
         showWelcomeScreen(false);
         csv = new CSV();
-        columnController.setItems(observableArrayList());
+//        columnController.setItems(observableArrayList());
         pivotController.setColumn(null);
         resultsTable.clearAll();
         contentController.openEmpty();
@@ -288,12 +285,12 @@ public final class App extends Application implements ColumnListener, PivotListe
             showWelcomeScreen(false);
             updateAll();
         } catch (CsvReaderException e) {
-            if (e.getCause() instanceof IncorrectColumnsException){
-                IncorrectColumnsException ice = (IncorrectColumnsException) e.getCause();
-                error(bundle.getString("load.file.load.formaterror"), MessageFormat.format(bundle.getString("load.file.load.incorrect.columns"), ice.getRequired(), ice.getFound(), ice.getRowIndex() ), file);
-            } else {
-                error(bundle.getString("load.file.load.failed"), e.getCause().getMessage(), file);
-            }
+//            if (e.getCause() instanceof IncorrectColumnsException){
+//                IncorrectColumnsException ice = (IncorrectColumnsException) e.getCause();
+//                error(bundle.getString("load.file.load.formaterror"), MessageFormat.format(bundle.getString("load.file.load.incorrect.columns"), ice.getRequired(), ice.getFound(), ice.getRowIndex() ), file);
+//            } else {
+//                error(bundle.getString("load.file.load.failed"), e.getCause().getMessage(), file);
+//            }
         }
     }
 
@@ -344,7 +341,7 @@ public final class App extends Application implements ColumnListener, PivotListe
         alert.showAndWait();
     }
 
-    public final void handleDeleteRowsAction(){
+    public void handleDeleteRowsAction(){
         ObservableList<ObservableRow> items = resultsTable.getSelectionModel().getSelectedItems();
         int index = resultsTable.getSelectionModel().getFocusedIndex();
         for (ObservableRow or : items){
@@ -363,7 +360,7 @@ public final class App extends Application implements ColumnListener, PivotListe
     /**
      * Handles the delete action.
      */
-    public final void handleDeleteColumnAction() {
+    public void handleDeleteColumnAction() {
         int index = columnController.getSelectionModel().getSelectedIndex();
         handleDeleteColumn(index);
     }
@@ -430,7 +427,7 @@ public final class App extends Application implements ColumnListener, PivotListe
     /**
      * Handles printing action.
      */
-    public final void handlePrintAction() {
+    public void handlePrintAction() {
         TextInputDialog dialog = new TextInputDialog("");
         dialog.setTitle(bundle.getString("app.title"));
         dialog.setHeaderText(bundle.getString("dialog.print"));
@@ -577,7 +574,7 @@ public final class App extends Application implements ColumnListener, PivotListe
         final File selectedFile = fileChooser.showOpenDialog(stage);
         if (selectedFile != null) {
             try {
-                csv.importFile(selectedFile);
+                csv.readFile(selectedFile);
                 resultsTable.setCSV(csv);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -593,7 +590,7 @@ public final class App extends Application implements ColumnListener, PivotListe
         final File selectedFile = fileChooser.showSaveDialog(stage);
         if (selectedFile != null) {
             try {
-                csv.writeFile(selectedFile, resultsTable.getQuery());
+                csv.writeFile(selectedFile);
             } catch (Exception e) {
                 alert(bundle.getString("file.export.csv.failed"));
             }
@@ -610,7 +607,7 @@ public final class App extends Application implements ColumnListener, PivotListe
         final File selectedFile = fileChooser.showSaveDialog(stage);
         if (selectedFile != null) {
             try {
-                csv.writeJSON(selectedFile, resultsTable.getQuery());
+                csv.writeJSON(selectedFile);
             } catch (Exception e) {
                 alert(bundle.getString("file.export.json.failed"));
             }
